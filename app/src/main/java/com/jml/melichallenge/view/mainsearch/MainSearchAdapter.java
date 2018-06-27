@@ -25,9 +25,14 @@ public class MainSearchAdapter extends PagedRecyclerViewAdapter<SearchItemViewHo
 		this.items = new ArrayList<>();
 	}
 
-	public void setItems(List<Item> list)
+	public void clear()
 	{
 		this.items.clear();
+		notifyDataSetChanged();
+	}
+
+	public void appendItems(List<Item> list)
+	{
 		this.items.addAll(list);
 		notifyDataSetChanged();
 	}

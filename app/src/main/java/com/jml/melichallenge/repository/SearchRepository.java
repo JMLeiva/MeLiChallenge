@@ -1,5 +1,9 @@
 package com.jml.melichallenge.repository;
 
+import android.arch.lifecycle.LiveData;
+import android.arch.lifecycle.MutableLiveData;
+
+import com.jml.melichallenge.model.SearchQuery;
 import com.jml.melichallenge.model.SearchResult;
 import com.jml.melichallenge.network.ApiCallback;
 import com.jml.melichallenge.network.MeLiApi;
@@ -25,21 +29,25 @@ public class SearchRepository extends Repository<SearchResult>
 		super(api);
 	}
 
-	public void search(String siteId, String qStr)
+	public LiveData<SearchResult> search(SearchQuery searchQuery)
 	{
-		getApi().search(siteId, qStr, new ApiCallback<SearchResult>()
+		final MutableLiveData<SearchResult> data = new MutableLiveData<>();
+
+		getApi().search(searchQuery.getSite(), searchQuery.getQStr(), searchQuery.getOffset(), searchQuery.getLimit(),  new ApiCallback<SearchResult>()
 		{
 			@Override
 			public void onResponse(SearchResult response)
 			{
-				getObserverHandler().sendGet(response);
+				data.setValue(response);
 			}
 
 			@Override
 			public void onFailure(Throwable t)
 			{
-				getObserverHandler().sendError();
+
 			}
 		});
+
+		return data;
 	}
 }

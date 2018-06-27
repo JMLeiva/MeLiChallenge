@@ -22,5 +22,5 @@ public interface MeLiApi
 		}
 	}
 
-	void search(String siteId, String qStr, ApiCallback<SearchResult> callback);
+	void search(String siteId, String qStr, int offset, int limit, ApiCallback<SearchResult> callback);
 }
