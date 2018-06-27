@@ -2,12 +2,12 @@ package com.jml.melichallenge.repository;
 
 import java.util.concurrent.ConcurrentHashMap;
 
-public class ActionHandler<T>
+public class ObserverHandler<T>
 {
-	private final ConcurrentHashMap<Integer, ActionListener.Get<T>> getListeners;
-	private final ConcurrentHashMap<Integer, ActionListener.Error> errorListeners;
+	private final ConcurrentHashMap<Integer, RepositoryObserver.Get<T>> getListeners;
+	private final ConcurrentHashMap<Integer, RepositoryObserver.Error> errorListeners;
 
-	ActionHandler()
+	ObserverHandler()
 	{
 		getListeners = new ConcurrentHashMap<>();
 		errorListeners = new ConcurrentHashMap<>();
@@ -18,7 +18,7 @@ public class ActionHandler<T>
 	{
 		synchronized (getListeners)
 		{
-			for (ActionListener.Get<T> getListener : getListeners.values())
+			for (RepositoryObserver.Get<T> getListener : getListeners.values())
 			{
 				getListener.onGet(object);
 			}
@@ -29,14 +29,14 @@ public class ActionHandler<T>
 	{
 		synchronized (errorListeners)
 		{
-			for (ActionListener.Error errorListener : errorListeners.values())
+			for (RepositoryObserver.Error errorListener : errorListeners.values())
 			{
 				errorListener.onError();
 			}
 		}
 	}
 
-	public void registerGet(ActionListener.Get<T> target)
+	public void registerGet(RepositoryObserver.Get<T> target)
 	{
 		synchronized (getListeners)
 		{
@@ -44,7 +44,7 @@ public class ActionHandler<T>
 		}
 	}
 
-	public void registerError(ActionListener.Error target)
+	public void registerError(RepositoryObserver.Error target)
 	{
 		synchronized (errorListeners)
 		{

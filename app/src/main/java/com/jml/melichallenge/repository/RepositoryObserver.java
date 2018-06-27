@@ -1,7 +1,7 @@
 package com.jml.melichallenge.repository;
 
 
-public class ActionListener
+public class RepositoryObserver
 {
 	public interface Error
 	{

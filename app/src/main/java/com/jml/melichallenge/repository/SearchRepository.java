@@ -1,8 +1,5 @@
 package com.jml.melichallenge.repository;
 
-import android.arch.lifecycle.LiveData;
-import android.arch.lifecycle.MutableLiveData;
-
 import com.jml.melichallenge.model.SearchResult;
 import com.jml.melichallenge.network.ApiCallback;
 import com.jml.melichallenge.network.MeLiApi;
@@ -35,13 +32,13 @@ public class SearchRepository extends Repository<SearchResult>
 			@Override
 			public void onResponse(SearchResult response)
 			{
-				getActionHandler().sendGet(response);
+				getObserverHandler().sendGet(response);
 			}
 
 			@Override
 			public void onFailure(Throwable t)
 			{
-				getActionHandler().sendError();
+				getObserverHandler().sendError();
 			}
 		});
 	}

@@ -4,12 +4,12 @@ import com.jml.melichallenge.network.MeLiApi;
 
 public abstract class Repository<T>
 {
-	private ActionHandler<T> actionHandler;
+	private ObserverHandler<T> observerHandler;
 	private MeLiApi api;
 
 	public Repository(MeLiApi meLiApi)
 	{
-		actionHandler = new ActionHandler<>();
+		observerHandler = new ObserverHandler<>();
 		this.api = meLiApi;
 	}
 
@@ -18,8 +18,8 @@ public abstract class Repository<T>
 		return api;
 	}
 
-	public ActionHandler<T> getActionHandler()
+	public ObserverHandler<T> getObserverHandler()
 	{
-		return actionHandler;
+		return observerHandler;
 	}
 }

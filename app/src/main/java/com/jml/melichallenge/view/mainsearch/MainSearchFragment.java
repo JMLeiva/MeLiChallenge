@@ -11,14 +11,14 @@ import android.view.ViewGroup;
 
 import com.jml.melichallenge.R;
 import com.jml.melichallenge.model.SearchResult;
-import com.jml.melichallenge.repository.ActionListener;
+import com.jml.melichallenge.repository.RepositoryObserver;
 import com.jml.melichallenge.repository.SearchRepository;
 import com.jmleiva.pagedrecyclerview.PagedRecyclerViewAdapter;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class MainSearchFragment extends Fragment implements PagedRecyclerViewAdapter.Paginator, ActionListener.Get<SearchResult>,ActionListener.Error
+public class MainSearchFragment extends Fragment implements PagedRecyclerViewAdapter.Paginator, RepositoryObserver.Get<SearchResult>,RepositoryObserver.Error
 {
 	@BindView(R.id.recyclerView)
 	RecyclerView recyclerView;
@@ -71,8 +71,8 @@ public class MainSearchFragment extends Fragment implements PagedRecyclerViewAda
 	{
 		super.onResume();
 
-		SearchRepository.getInstance().getActionHandler().registerGet(this);
-		SearchRepository.getInstance().getActionHandler().registerError(this);
+		SearchRepository.getInstance().getObserverHandler().registerGet(this);
+		SearchRepository.getInstance().getObserverHandler().registerError(this);
 
 
 	}
@@ -81,7 +81,7 @@ public class MainSearchFragment extends Fragment implements PagedRecyclerViewAda
 	public void onPause()
 	{
 		super.onPause();
-		SearchRepository.getInstance().getActionHandler().unregisterAll(this);
+		SearchRepository.getInstance().getObserverHandler().unregisterAll(this);
 	}
 
 	@Override
