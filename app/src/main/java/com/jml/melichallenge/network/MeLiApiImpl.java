@@ -1,7 +1,11 @@
 package com.jml.melichallenge.network;
 
 import com.google.gson.GsonBuilder;
+import com.jml.melichallenge.model.Address;
+import com.jml.melichallenge.model.Attribute;
 import com.jml.melichallenge.model.Item;
+import com.jml.melichallenge.model.Paging;
+import com.jml.melichallenge.model.Reviews;
 import com.jml.melichallenge.model.SearchResult;
 
 import java.io.IOException;
@@ -28,7 +32,10 @@ public class MeLiApiImpl implements MeLiApi
 	private interface Service
 	{
 		@GET(PATH_SITE + "/{site_id}/" + PATH_SEARCH)
-		Call<SearchResult.DTO> search(@Path("site_id") String siteId, @Query("q") String qStr);
+		Call<SearchResult> search(@Path("site_id") String siteId,
+								  @Query("q") String qStr,
+								  @Query("offset") int offset,
+								  @Query("limit") int limit);
 	}
 
 	private Service service;
@@ -51,7 +58,12 @@ public class MeLiApiImpl implements MeLiApi
 		OkHttpClient okHttpClient = okHttpClientBuilder.build();
 
 		GsonBuilder builder = new GsonBuilder()
-				.registerTypeAdapter(Item.class, new Item.Deserializer());
+				.registerTypeAdapter(Address.class, new Address.Deserializer())
+				.registerTypeAdapter(Attribute.class, new Attribute.Deserializer())
+				.registerTypeAdapter(Item.class, new Item.Deserializer())
+				.registerTypeAdapter(Paging.class, new Paging.Deserializer())
+				.registerTypeAdapter(Reviews.class, new Reviews.Deserializer())
+				.registerTypeAdapter(SearchResult.class, new SearchResult.Deserializer());
 
 		return new Retrofit.Builder()
 				.baseUrl(URL_ROOT)
@@ -63,16 +75,16 @@ public class MeLiApiImpl implements MeLiApi
 
 	// API CALLS
 	@Override
-	public void search(String siteId, String qStr, final ApiCallback<SearchResult> callback)
+	public void search(String siteId, String qStr, int offset, int limit, final ApiCallback<SearchResult> callback)
 	{
-		service.search(siteId, qStr).enqueue(new Callback<SearchResult.DTO>()
+		service.search(siteId, qStr, offset, limit).enqueue(new Callback<SearchResult>()
 		{
 			@Override
-			public void onResponse(Call<SearchResult.DTO> call, Response<SearchResult.DTO> response)
+			public void onResponse(Call<SearchResult> call, Response<SearchResult> response)
 			{
 				if(response.isSuccessful())
 				{
-					callback.onResponse(new SearchResult(response.body()));
+					callback.onResponse(response.body());
 				}
 				else
 				{
@@ -82,7 +94,7 @@ public class MeLiApiImpl implements MeLiApi
 			}
 
 			@Override
-			public void onFailure(Call<SearchResult.DTO> call, Throwable t)
+			public void onFailure(Call<SearchResult> call, Throwable t)
 			{
 				callback.onFailure(t);
 			}

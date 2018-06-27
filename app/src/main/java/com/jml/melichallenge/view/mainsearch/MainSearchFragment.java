@@ -1,6 +1,9 @@
 package com.jml.melichallenge.view.mainsearch;
 
+import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -10,23 +13,27 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.jml.melichallenge.R;
+import com.jml.melichallenge.model.SearchQuery;
 import com.jml.melichallenge.model.SearchResult;
-import com.jml.melichallenge.repository.RepositoryObserver;
 import com.jml.melichallenge.repository.SearchRepository;
+import com.jml.melichallenge.view.viewmodel.SearchViewModel;
 import com.jmleiva.pagedrecyclerview.PagedRecyclerViewAdapter;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class MainSearchFragment extends Fragment implements PagedRecyclerViewAdapter.Paginator, RepositoryObserver.Get<SearchResult>,RepositoryObserver.Error
+public class MainSearchFragment extends Fragment implements PagedRecyclerViewAdapter.Paginator
 {
 	@BindView(R.id.recyclerView)
 	RecyclerView recyclerView;
 
 	@BindView(R.id.swiperefresh)
 	SwipeRefreshLayout swiperefresh;
-
 	MainSearchAdapter adapter;
+
+	SearchViewModel viewModel;
+
+	SearchResult lastResult;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState)
@@ -38,7 +45,27 @@ public class MainSearchFragment extends Fragment implements PagedRecyclerViewAda
 	public void onActivityCreated(Bundle savedInstanceState)
 	{
 		super.onActivityCreated(savedInstanceState);
+		viewModel = ViewModelProviders.of(this).get(SearchViewModel.class);
+		viewModel.setQuery(new SearchQuery.Builder().site("MLA").qStr("phyrexian arena foil").pageSize(10).build());
 
+		setupObserver(viewModel);
+	}
+
+	private void setupObserver(SearchViewModel viewModel)
+	{
+		// Update the list when the data changes
+		viewModel.getSearchObservable().observe(this, new Observer<SearchResult>()
+		{
+			@Override
+			public void onChanged(@Nullable SearchResult searchResult)
+			{
+				adapter.appendItems(searchResult.getResults());
+				swiperefresh.setRefreshing(false);
+				adapter.stopLoading();
+
+				lastResult = searchResult;
+			}
+		});
 	}
 
 	@Override
@@ -59,7 +86,7 @@ public class MainSearchFragment extends Fragment implements PagedRecyclerViewAda
 			@Override
 			public void onRefresh()
 			{
-				SearchRepository.getInstance().search("MLA", "PLAYSTATION");
+				viewModel.resetPaging();
 			}
 		});
 
@@ -70,43 +97,24 @@ public class MainSearchFragment extends Fragment implements PagedRecyclerViewAda
 	public void onResume()
 	{
 		super.onResume();
-
-		SearchRepository.getInstance().getObserverHandler().registerGet(this);
-		SearchRepository.getInstance().getObserverHandler().registerError(this);
-
-
 	}
 
 	@Override
 	public void onPause()
 	{
 		super.onPause();
-		SearchRepository.getInstance().getObserverHandler().unregisterAll(this);
 	}
 
 	@Override
 	public void loadNewPage()
 	{
-		// TODO
+		viewModel.advance();
 	}
 
 	@Override
 	public boolean hasMoreData()
 	{
-		return true;
-	}
-
-	@Override
-	public void onGet(SearchResult object)
-	{
-		adapter.setItems(object.getResults());
-
-		swiperefresh.setRefreshing(false);
-	}
-
-	@Override
-	public void onError()
-	{
-
+		if(lastResult == null) return false;
+		return !lastResult.getPaging().isFinished();
 	}
 }
