@@ -46,7 +46,7 @@ public class MainSearchFragment extends Fragment implements PagedRecyclerViewAda
 	{
 		super.onActivityCreated(savedInstanceState);
 		viewModel = ViewModelProviders.of(this).get(SearchViewModel.class);
-		viewModel.setQuery(new SearchQuery.Builder().site("MLA").qStr("PLAYSTATION").pageSize(10).build());
+		viewModel.setQuery(new SearchQuery.Builder().site("MLA").qStr("phyrexian arena foil").pageSize(10).build());
 
 		setupObserver(viewModel);
 	}
