@@ -88,15 +88,25 @@ public class MeLiApiImpl implements MeLiApi
 				}
 				else
 				{
-					// TODO
-					callback.onFailure(null);
+					String errorMessage = "";
+
+					try
+					{
+						errorMessage = response.errorBody().string();
+					}
+					catch (IOException e)
+					{
+						// IGNORE
+					}
+
+					callback.onFailure(response.code(), errorMessage);
 				}
 			}
 
 			@Override
 			public void onFailure(Call<SearchResult> call, Throwable t)
 			{
-				callback.onFailure(t);
+				callback.onFailure(0, t.getMessage());
 			}
 		});
 	}

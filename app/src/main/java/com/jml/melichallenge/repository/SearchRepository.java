@@ -9,7 +9,7 @@ import com.jml.melichallenge.network.ApiCallback;
 import com.jml.melichallenge.network.MeLiApi;
 import com.jml.melichallenge.network.MeLiApiImpl;
 
-public class SearchRepository extends Repository<SearchResult>
+public class SearchRepository extends Repository
 {
 	private static SearchRepository _instance;
 
@@ -29,22 +29,22 @@ public class SearchRepository extends Repository<SearchResult>
 		super(api);
 	}
 
-	public LiveData<SearchResult> search(SearchQuery searchQuery)
+	public LiveData<ResponseWrapper<SearchResult>> search(SearchQuery searchQuery)
 	{
-		final MutableLiveData<SearchResult> data = new MutableLiveData<>();
+		final MutableLiveData<ResponseWrapper<SearchResult>> data = new MutableLiveData<>();
 
 		getApi().search(searchQuery.getSite(), searchQuery.getQStr(), searchQuery.getOffset(), searchQuery.getLimit(),  new ApiCallback<SearchResult>()
 		{
 			@Override
 			public void onResponse(SearchResult response)
 			{
-				data.setValue(response);
+				data.setValue(ResponseWrapper.successfullResponse(response));
 			}
 
 			@Override
-			public void onFailure(Throwable t)
+			public void onFailure(int code, String message)
 			{
-
+				data.setValue(ResponseWrapper.<SearchResult>errorResponse(code, message));
 			}
 		});
 

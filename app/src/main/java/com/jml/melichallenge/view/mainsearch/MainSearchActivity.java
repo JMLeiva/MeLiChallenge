@@ -4,6 +4,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
+
 import com.jml.melichallenge.R;
 
 public class MainSearchActivity extends AppCompatActivity
@@ -16,6 +18,9 @@ public class MainSearchActivity extends AppCompatActivity
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main_search_activity);
+
+		Toolbar toolbar = findViewById(R.id.toolbar);
+		setSupportActionBar(toolbar);
 
 
 		if (savedInstanceState == null)
