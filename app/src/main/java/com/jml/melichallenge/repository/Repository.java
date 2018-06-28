@@ -2,7 +2,7 @@ package com.jml.melichallenge.repository;
 
 import com.jml.melichallenge.network.MeLiApi;
 
-public abstract class Repository<T>
+public abstract class Repository
 {
 	private MeLiApi api;
 
