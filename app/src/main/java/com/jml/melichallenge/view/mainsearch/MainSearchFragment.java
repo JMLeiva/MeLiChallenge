@@ -20,16 +20,19 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.jml.melichallenge.R;
+import com.jml.melichallenge.model.Item;
 import com.jml.melichallenge.model.RequestState;
 import com.jml.melichallenge.model.SearchQuery;
 import com.jml.melichallenge.model.SearchResult;
 import com.jml.melichallenge.repository.ErrorWrapper;
+import com.jml.melichallenge.repository.ItemRepository;
+import com.jml.melichallenge.view.common.AdapterClickListener;
 import com.jmleiva.pagedrecyclerview.PagedRecyclerViewAdapter;
 import com.jml.melichallenge.view.mainsearch.viewmodel.SearchViewModel;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class MainSearchFragment extends Fragment implements PagedRecyclerViewAdapter.Paginator, SearchView.OnQueryTextListener, SearchView.OnCloseListener, SearchView.OnSuggestionListener
+public class MainSearchFragment extends Fragment implements PagedRecyclerViewAdapter.Paginator, SearchView.OnQueryTextListener, SearchView.OnCloseListener, SearchView.OnSuggestionListener, AdapterClickListener<Item>
 {
 	@BindView(R.id.recyclerView)
 	RecyclerView recyclerView;
@@ -67,7 +70,7 @@ public class MainSearchFragment extends Fragment implements PagedRecyclerViewAda
 
 		ButterKnife.bind(this, view);
 
-		adapter = new MainSearchAdapter(getContext());
+		adapter = new MainSearchAdapter(getContext(), this);
 		adapter.setPaginator(this);
 
 		recyclerView.setAdapter(adapter);
@@ -88,7 +91,7 @@ public class MainSearchFragment extends Fragment implements PagedRecyclerViewAda
 	private void setupObserver(SearchViewModel viewModel)
 	{
 		// Update the list when the data changes
-		viewModel.getSearchObservable().observe(this, new Observer<SearchResult>()
+		viewModel.getDataObservable().observe(this, new Observer<SearchResult>()
 		{
 			@Override
 			public void onChanged(@Nullable SearchResult searchResult)
@@ -220,5 +223,11 @@ public class MainSearchFragment extends Fragment implements PagedRecyclerViewAda
 		progressDialog.getWindow().setAttributes(lp);
 		progressDialog.setCancelable(true);
 		progressDialog.show();*/
+	}
+
+	@Override
+	public void onClick(Item item)
+	{
+		ItemRepository.getInstance().getItem(item.getId());
 	}
 }
