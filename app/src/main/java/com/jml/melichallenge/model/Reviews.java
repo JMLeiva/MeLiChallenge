@@ -16,10 +16,20 @@ public class Reviews
 		this.dto = dto;
 	}
 
+	public int getTotal()
+	{
+		return dto.total;
+	}
+
+	public float getAverage()
+	{
+		return dto.rating_average;
+	}
+
 	private static class DTO
 	{
 		private float rating_average;
-		private float total;
+		private int total;
 	}
 
 	public static class Deserializer implements JsonDeserializer<Reviews>

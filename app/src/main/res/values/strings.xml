@@ -3,4 +3,6 @@
     <string name="action_about">About</string>
     <string name="menu_search">Search</string>
     <string name="main_search_hint">Search on Mercado Libre</string>
+    <string name="discount_fmt">%1$d\%% OFF</string>
+    <string name="reviewTotal_fmt">(%1$d)</string>
 </resources>
