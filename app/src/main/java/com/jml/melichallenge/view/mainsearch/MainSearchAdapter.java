@@ -60,14 +60,12 @@ public class MainSearchAdapter extends PagedRecyclerViewAdapter<SearchItemViewHo
 	@Override
 	protected void onBindNormalViewHolder(SearchItemViewHolder holder, int position)
 	{
-		holder.setup(items.get(position));
+		holder.setup(context, items.get(position));
 	}
 
 	@Override
 	protected void onBindLoadingViewHolder(PagedViewHolder holder)
 	{
-
+		// No need to bind anything in here
 	}
-
-
 }
