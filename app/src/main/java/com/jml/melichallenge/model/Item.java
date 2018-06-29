@@ -79,6 +79,11 @@ public class Item
 		return dto.reviews;
 	}
 
+	public String getId()
+	{
+		return dto.id;
+	}
+
 	private static class DTO
 	{
 		private String id;
@@ -94,9 +99,12 @@ public class Item
 		private String thumbnail;
 		private boolean accepts_mercadopago;
 		private Address address;
+		private SellerAddress seller_address;
 		private String category_id;
 		private Reviews reviews;
 		private List<Attribute> attributes;
+		private List<Picture> pictures;
+		private String warranty;
 	}
 
 	public static class Deserializer implements JsonDeserializer<Item>

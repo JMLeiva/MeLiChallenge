@@ -7,22 +7,27 @@ import android.view.ViewGroup;
 
 import com.jml.melichallenge.R;
 import com.jml.melichallenge.model.Item;
+import com.jml.melichallenge.view.common.AdapterClickListener;
+import com.jml.melichallenge.view.common.RecyclerViewClickListener;
 import com.jmleiva.pagedrecyclerview.PagedRecyclerViewAdapter;
 import com.jmleiva.pagedrecyclerview.PagedViewHolder;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainSearchAdapter extends PagedRecyclerViewAdapter<SearchItemViewHolder, PagedViewHolder>
+public class MainSearchAdapter extends PagedRecyclerViewAdapter<SearchItemViewHolder, PagedViewHolder> implements RecyclerViewClickListener
 {
 	private List<Item> items;
 	private Context context;
 
+	private AdapterClickListener<Item> listener;
 
-	public MainSearchAdapter(Context context)
+
+	public MainSearchAdapter(Context context, AdapterClickListener<Item> listener)
 	{
 		this.context = context;
 		this.items = new ArrayList<>();
+		this.listener = listener;
 	}
 
 	public void clear()
@@ -47,7 +52,7 @@ public class MainSearchAdapter extends PagedRecyclerViewAdapter<SearchItemViewHo
 	protected SearchItemViewHolder onCreateNormalViewHolder(ViewGroup parent, int viewType)
 	{
 		View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_row_layout, parent, false);
-		return new SearchItemViewHolder(view);
+		return new SearchItemViewHolder(view, this);
 	}
 
 	@Override
@@ -67,5 +72,11 @@ public class MainSearchAdapter extends PagedRecyclerViewAdapter<SearchItemViewHo
 	protected void onBindLoadingViewHolder(PagedViewHolder holder)
 	{
 		// No need to bind anything in here
+	}
+
+	@Override
+	public void onClick(View view, int position)
+	{
+		this.listener.onClick(items.get(position));
 	}
 }

@@ -11,12 +11,13 @@ import com.jml.melichallenge.GlideApp;
 import com.jml.melichallenge.MeLiGlideApp;
 import com.jml.melichallenge.R;
 import com.jml.melichallenge.model.Item;
+import com.jml.melichallenge.view.common.RecyclerViewClickListener;
 import com.jmleiva.pagedrecyclerview.PagedViewHolder;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class SearchItemViewHolder extends PagedViewHolder
+public class SearchItemViewHolder extends PagedViewHolder implements View.OnClickListener
 {
 	@BindView(R.id.tv_name)
 	TextView tv_name;
@@ -39,10 +40,15 @@ public class SearchItemViewHolder extends PagedViewHolder
 	@BindView(R.id.tv_ratingCount)
 	TextView tv_ratingCount;
 
-	public SearchItemViewHolder(View itemView)
+	private RecyclerViewClickListener listener;
+
+	public SearchItemViewHolder(View itemView, RecyclerViewClickListener listener)
 	{
 		super(itemView);
 		ButterKnife.bind(this, itemView);
+
+		this.listener = listener;
+		itemView.setOnClickListener(this);
 	}
 
 	public void setup(Context context, Item item)
@@ -85,5 +91,11 @@ public class SearchItemViewHolder extends PagedViewHolder
 				.centerCrop()
 				//.placeholder(R.drawable.thumb_placeholder)
 				.into(iv_thumbnail);
+	}
+
+	@Override
+	public void onClick(View v)
+	{
+		listener.onClick(v, getAdapterPosition());
 	}
 }

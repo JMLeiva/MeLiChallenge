@@ -2,7 +2,6 @@ package com.jml.melichallenge.view.mainsearch.viewmodel;
 
 import android.app.Application;
 import android.arch.core.util.Function;
-import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.Transformations;
@@ -10,36 +9,32 @@ import android.arch.lifecycle.Transformations;
 import com.jml.melichallenge.model.RequestState;
 import com.jml.melichallenge.model.SearchQuery;
 import com.jml.melichallenge.model.SearchResult;
-import com.jml.melichallenge.repository.ErrorWrapper;
 import com.jml.melichallenge.repository.ResponseWrapper;
-import com.jml.melichallenge.repository.SearchRepository;
+import com.jml.melichallenge.repository.ItemRepository;
+import com.jml.melichallenge.view.common.BaseViewModel;
 
-public class SearchViewModel extends AndroidViewModel
+public class SearchViewModel extends BaseViewModel<SearchResult>
 {
-	private final MutableLiveData<SearchQuery> searchQueryInput = new MutableLiveData();
-
-	private LiveData<SearchResult> searchObservable;
-	private MutableLiveData<RequestState> requestStateObservable;
-	private MutableLiveData<ErrorWrapper> errorWrapperObservable;
-
+	private MutableLiveData<SearchQuery> searchQueryInput;
 	SearchQuery query;
 
 	public SearchViewModel(Application application)
 	{
 		super(application);
+	}
 
-
-		requestStateObservable = new MutableLiveData<>();
-		errorWrapperObservable = new MutableLiveData<>();
-
-		searchObservable = Transformations.switchMap(searchQueryInput, new Function<SearchQuery, LiveData<SearchResult>>()
+	@Override
+	protected LiveData<SearchResult> createDataObservable()
+	{
+		searchQueryInput = new MutableLiveData<>();
+		return Transformations.switchMap(searchQueryInput, new Function<SearchQuery, LiveData<SearchResult>>()
 		{
 			@Override
 			public LiveData<SearchResult> apply(SearchQuery query)
 			{
 				requestStateObservable.setValue(RequestState.LOADING);
 
-				return Transformations.map(SearchRepository.getInstance().search(query), new Function<ResponseWrapper<SearchResult>, SearchResult>()
+				return Transformations.map(ItemRepository.getInstance().search(query), new Function<ResponseWrapper<SearchResult>, SearchResult>()
 				{
 					@Override
 					public SearchResult apply(ResponseWrapper<SearchResult> input)
@@ -59,21 +54,6 @@ public class SearchViewModel extends AndroidViewModel
 				});
 			}
 		});
-	}
-
-	public LiveData<SearchResult> getSearchObservable()
-	{
-		return searchObservable;
-	}
-
-	public LiveData<RequestState> getStateObservable()
-	{
-		return requestStateObservable;
-	}
-
-	public LiveData<ErrorWrapper> getErrorObservable()
-	{
-		return errorWrapperObservable;
 	}
 
 	public void setQuery(SearchQuery query)
@@ -101,11 +81,5 @@ public class SearchViewModel extends AndroidViewModel
 
 		this.searchQueryInput.setValue(query);
 		this.query.advancePage();
-	}
-
-	@Override
-	protected void onCleared()
-	{
-		searchObservable = null;
 	}
 }
