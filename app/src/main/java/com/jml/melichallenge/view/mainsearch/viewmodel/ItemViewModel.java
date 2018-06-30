@@ -8,15 +8,17 @@ import android.arch.lifecycle.Transformations;
 
 import com.jml.melichallenge.model.Item;
 import com.jml.melichallenge.model.RequestState;
-import com.jml.melichallenge.model.SearchQuery;
 import com.jml.melichallenge.repository.ItemRepository;
 import com.jml.melichallenge.repository.ResponseWrapper;
 import com.jml.melichallenge.view.common.BaseViewModel;
 
+import javax.inject.Inject;
+
 public class ItemViewModel extends BaseViewModel<Item>
 {
 	private final MutableLiveData<String> itemIdInput = new MutableLiveData();
-	SearchQuery query;
+	@Inject
+	ItemRepository itemRepository;
 
 	public ItemViewModel(Application application)
 	{
@@ -33,7 +35,7 @@ public class ItemViewModel extends BaseViewModel<Item>
 			{
 				requestStateObservable.setValue(RequestState.LOADING);
 
-				return Transformations.map(ItemRepository.getInstance().getItem(itemId), new Function<ResponseWrapper<Item>, Item>()
+				return Transformations.map(itemRepository.getItem(itemId), new Function<ResponseWrapper<Item>, Item>()
 				{
 					@Override
 					public Item apply(ResponseWrapper<Item> input)

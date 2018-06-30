@@ -15,6 +15,8 @@ import com.jml.melichallenge.model.SellerAddress;
 
 import java.io.IOException;
 
+import javax.inject.Inject;
+
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Call;

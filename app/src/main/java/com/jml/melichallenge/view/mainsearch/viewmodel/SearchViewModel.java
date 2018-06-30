@@ -13,14 +13,21 @@ import com.jml.melichallenge.repository.ResponseWrapper;
 import com.jml.melichallenge.repository.ItemRepository;
 import com.jml.melichallenge.view.common.BaseViewModel;
 
+import javax.inject.Inject;
+
 public class SearchViewModel extends BaseViewModel<SearchResult>
 {
 	private MutableLiveData<SearchQuery> searchQueryInput;
+
+	ItemRepository itemRepository;
+
 	SearchQuery query;
 
-	public SearchViewModel(Application application)
+	@Inject
+	public SearchViewModel(Application application, ItemRepository itemRepository)
 	{
 		super(application);
+		this.itemRepository = itemRepository;
 	}
 
 	@Override
@@ -34,7 +41,7 @@ public class SearchViewModel extends BaseViewModel<SearchResult>
 			{
 				requestStateObservable.setValue(RequestState.LOADING);
 
-				return Transformations.map(ItemRepository.getInstance().search(query), new Function<ResponseWrapper<SearchResult>, SearchResult>()
+				return Transformations.map(itemRepository.search(query), new Function<ResponseWrapper<SearchResult>, SearchResult>()
 				{
 					@Override
 					public SearchResult apply(ResponseWrapper<SearchResult> input)
