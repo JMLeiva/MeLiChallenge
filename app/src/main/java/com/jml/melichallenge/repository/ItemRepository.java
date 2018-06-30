@@ -8,24 +8,15 @@ import com.jml.melichallenge.model.SearchQuery;
 import com.jml.melichallenge.model.SearchResult;
 import com.jml.melichallenge.network.ApiCallback;
 import com.jml.melichallenge.network.MeLiApi;
-import com.jml.melichallenge.network.MeLiApiImpl;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
+@Singleton
 public class ItemRepository extends Repository
 {
-	private static ItemRepository _instance;
-
-	public static synchronized ItemRepository getInstance()
-	{
-		if(_instance == null)
-		{
-			_instance = new ItemRepository(new MeLiApiImpl());
-		}
-
-		return _instance;
-	}
-
-
-	private ItemRepository(MeLiApi api)
+	@Inject
+	public ItemRepository(MeLiApi api)
 	{
 		super(api);
 	}

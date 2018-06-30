@@ -2,6 +2,7 @@ package com.jml.melichallenge.view.mainsearch;
 
 import android.app.SearchManager;
 import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.os.Bundle;
@@ -29,8 +30,12 @@ import com.jml.melichallenge.repository.ItemRepository;
 import com.jml.melichallenge.view.common.AdapterClickListener;
 import com.jmleiva.pagedrecyclerview.PagedRecyclerViewAdapter;
 import com.jml.melichallenge.view.mainsearch.viewmodel.SearchViewModel;
+
+import javax.inject.Inject;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import dagger.android.support.AndroidSupportInjection;
 
 public class MainSearchFragment extends Fragment implements PagedRecyclerViewAdapter.Paginator, SearchView.OnQueryTextListener, SearchView.OnCloseListener, SearchView.OnSuggestionListener, AdapterClickListener<Item>
 {
@@ -42,15 +47,18 @@ public class MainSearchFragment extends Fragment implements PagedRecyclerViewAda
 	MainSearchAdapter adapter;
 
 	SearchViewModel viewModel;
-
-
+	
 	// TODO esto deberia estar en otro lado
 	SearchResult lastResult;
 	boolean hideLoading = true;
 
+	@Inject
+	ViewModelProvider.Factory viewModelFactory;
+
 	@Override
 	public void onCreate(Bundle savedInstanceState)
 	{
+		AndroidSupportInjection.inject(this);
 		super.onCreate(savedInstanceState);
 		setHasOptionsMenu(true);
 	}
@@ -59,7 +67,7 @@ public class MainSearchFragment extends Fragment implements PagedRecyclerViewAda
 	public void onActivityCreated(Bundle savedInstanceState)
 	{
 		super.onActivityCreated(savedInstanceState);
-		viewModel = ViewModelProviders.of(this).get(SearchViewModel.class);
+		viewModel = ViewModelProviders.of(this, viewModelFactory).get(SearchViewModel.class);
 		setupObserver(viewModel);
 	}
 
@@ -228,6 +236,6 @@ public class MainSearchFragment extends Fragment implements PagedRecyclerViewAda
 	@Override
 	public void onClick(Item item)
 	{
-		ItemRepository.getInstance().getItem(item.getId());
+		// TODO
 	}
 }

@@ -8,7 +8,10 @@ import android.support.v7.widget.Toolbar;
 
 import com.jml.melichallenge.R;
 
-public class MainSearchActivity extends AppCompatActivity
+import dagger.android.AndroidInjector;
+import dagger.android.support.DaggerAppCompatActivity;
+
+public class MainSearchActivity extends DaggerAppCompatActivity
 {
 
 	private final String FRAGMENT_TAG = "com.jml.MainSearchFragment";
