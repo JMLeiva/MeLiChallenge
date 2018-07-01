@@ -46,11 +46,13 @@ public class MainSearchFragment extends Fragment implements PagedRecyclerViewAda
 	SwipeRefreshLayout swiperefresh;
 	MainSearchAdapter adapter;
 
+	@BindView(R.id.include_welcome)
+	View include_welcome;
+
+	@BindView(R.id.include_empty)
+	View include_empty;
+
 	SearchViewModel viewModel;
-	
-	// TODO esto deberia estar en otro lado
-	SearchResult lastResult;
-	boolean hideLoading = true;
 
 	@Inject
 	ViewModelProvider.Factory viewModelFactory;
@@ -104,10 +106,18 @@ public class MainSearchFragment extends Fragment implements PagedRecyclerViewAda
 			@Override
 			public void onChanged(@Nullable SearchResult searchResult)
 			{
-				adapter.appendItems(searchResult.getResults());
 				swiperefresh.setRefreshing(false);
 				adapter.stopLoading();
-				lastResult = searchResult;
+
+				if(searchResult.getPaging().getTotal() == 0)
+				{
+					showEmtpyState();
+					return;
+				}
+
+				showResults();
+				adapter.appendItems(searchResult.getResults());
+
 			}
 		});
 
@@ -116,7 +126,7 @@ public class MainSearchFragment extends Fragment implements PagedRecyclerViewAda
 			@Override
 			public void onChanged(@Nullable RequestState requestState)
 			{
-				// TODO
+
 			}
 		});
 
@@ -131,6 +141,19 @@ public class MainSearchFragment extends Fragment implements PagedRecyclerViewAda
 		});
 	}
 
+	private void showEmtpyState()
+	{
+		include_empty.setVisibility(View.VISIBLE);
+		swiperefresh.setVisibility(View.GONE);
+	}
+
+	private void showResults()
+	{
+		include_welcome.setVisibility(View.GONE);
+		include_empty.setVisibility(View.GONE);
+		swiperefresh.setVisibility(View.VISIBLE);
+	}
+
 	@Override
 	public void loadNewPage()
 	{
@@ -140,8 +163,10 @@ public class MainSearchFragment extends Fragment implements PagedRecyclerViewAda
 	@Override
 	public boolean hasMoreData()
 	{
-		if(lastResult == null ) return !hideLoading;
-		return !lastResult.getPaging().isFinished();
+		SearchResult result = viewModel.getCurrentSearchResult();
+
+		if(result == null) return true;
+		return !result.getPaging().isFinished();
 	}
 
 	@Override
@@ -178,7 +203,7 @@ public class MainSearchFragment extends Fragment implements PagedRecyclerViewAda
 
 		adapter.clear();
 		viewModel.setQuery(new SearchQuery.Builder().site("MLA").qStr(query).pageSize(10).build());
-		hideLoading = false;
+		showResults();
 		return false;
 	}
 

@@ -16,4 +16,6 @@
     <string name="warranty_customTitle">Seller warranty</string>
     <string name="attributes">Attributes</string>
     <string name="description">Description</string>
+    <string name="search_welcomeText">Welcome to MeLiChallenge, try searching something to start.</string>
+    <string name="search_emtpyStateText">Ups, there\'s no results for what you serached, try searching something else</string>
 </resources>
