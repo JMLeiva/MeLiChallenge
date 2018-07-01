@@ -6,8 +6,10 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.graphics.Paint;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewPager;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
 import android.util.Log;
@@ -31,6 +33,10 @@ import com.jml.melichallenge.model.Item;
 import com.jml.melichallenge.model.RequestState;
 import com.jml.melichallenge.model.SellerAddress;
 import com.jml.melichallenge.repository.ErrorWrapper;
+import com.jml.melichallenge.view.gallery.GalleryAdapter;
+import com.jml.melichallenge.view.gallery.GalleryFragment;
+
+import java.util.ArrayList;
 
 import javax.inject.Inject;
 
@@ -42,8 +48,8 @@ import static com.jml.melichallenge.view.details.DetailsActivity.ITEM_ID_EXTRA;
 
 public class DetailsFragment extends Fragment
 {
-	@BindView(R.id.iv_tempImage)
-	ImageView iv_tempImage;
+	@BindView(R.id.vp_gallery)
+	ViewPager vp_gallery;
 
 	@BindView(R.id.tv_condition)
 	TextView tv_condition;
@@ -104,6 +110,7 @@ public class DetailsFragment extends Fragment
 
 	ItemViewModel viewModel;
 	DescriptionViewModel descriptionViewModel;
+	GalleryAdapter galleryAdapter;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState)
@@ -218,7 +225,7 @@ public class DetailsFragment extends Fragment
 
 	private void setupUI(Item item)
 	{
-		setupPictues(item);
+		setupGallery(item);
 		setupMainData(item);
 		setupPayment(item);
 		setupSeller(item);
@@ -226,13 +233,30 @@ public class DetailsFragment extends Fragment
 		setupAttributes(item);
 	}
 
-	private void setupPictues(Item item)
+	private void setupGallery(final Item item)
 	{
-
-		if (item.hasPictures())
+		galleryAdapter = new GalleryAdapter(getFragmentManager(), item.getPictures(), new GalleryAdapter.OnItemClickListener()
 		{
-			GlideApp.with(getContext()).load(item.getPictures().get(0).getUrl()).centerCrop().into(iv_tempImage);
-		}
+			@Override
+			public void onItemClick()
+			{
+				GalleryFragment galleryFragment = new GalleryFragment();
+				Bundle args = new Bundle();
+				args.putParcelableArrayList(GalleryFragment.PICTURES_EXTRA, new ArrayList<Parcelable>(item.getPictures()));
+				args.putInt(GalleryFragment.INDEX_EXTRA, vp_gallery.getCurrentItem());
+				galleryFragment.setArguments(args);
+
+				getFragmentManager()
+						.beginTransaction()
+						.setReorderingAllowed(true)
+						//.addSharedElement(imageView, imageView.getTransitionName())
+						.replace(R.id.fragmentContainer, galleryFragment, GalleryFragment.class.getSimpleName()) //REVISAR CAMBIO DE CONFIGURACION CON ESTO ABIERTO
+						.addToBackStack(null)
+						.commit();
+			}
+		});
+
+		vp_gallery.setAdapter(galleryAdapter);
 	}
 
 	private void setupMainData(Item item)

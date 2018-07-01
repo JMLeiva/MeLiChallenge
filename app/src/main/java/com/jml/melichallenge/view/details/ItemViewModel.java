@@ -62,6 +62,11 @@ public class ItemViewModel extends BaseViewModel<Item>
 
 	public void setItemId(String itemId)
 	{
+		if(itemIdInput.getValue() != null && itemIdInput.getValue().equals(itemId))
+		{
+			return;
+		}
+
 		this.itemIdInput.setValue(itemId);
 	}
 }

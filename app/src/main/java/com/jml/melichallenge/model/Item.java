@@ -92,6 +92,11 @@ public class Item
 
 	public List<Picture> getPictures()
 	{
+		if(!hasPictures())
+		{
+			return Collections.emptyList();
+		}
+
 		return Collections.unmodifiableList(dto.pictures);
 	}
 
