@@ -3,8 +3,10 @@ package com.jml.melichallenge.di;
 import android.arch.lifecycle.ViewModel;
 import android.arch.lifecycle.ViewModelProvider;
 
+import com.jml.melichallenge.repository.persistence.SearchTerm;
 import com.jml.melichallenge.view.details.DescriptionViewModel;
 import com.jml.melichallenge.view.details.ItemViewModel;
+import com.jml.melichallenge.view.mainsearch.SearchTermViewModel;
 import com.jml.melichallenge.view.mainsearch.SearchViewModel;
 
 import dagger.Binds;
@@ -18,6 +20,11 @@ public abstract class ViewModelModule
 	@IntoMap
 	@ViewModelKey(SearchViewModel.class)
 	abstract ViewModel bindSearchViewModel(SearchViewModel searchViewModel);
+
+	@Binds
+	@IntoMap
+	@ViewModelKey(SearchTermViewModel.class)
+	abstract ViewModel bindSearchTermViewModel(SearchTermViewModel searchTermViewModel);
 
 	@Binds
 	@IntoMap

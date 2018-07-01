@@ -13,6 +13,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -30,6 +31,8 @@ import com.jml.melichallenge.repository.ErrorWrapper;
 import com.jml.melichallenge.view.common.AdapterClickListener;
 import com.jml.melichallenge.view.details.DetailsActivity;
 import com.jmleiva.pagedrecyclerview.PagedRecyclerViewAdapter;
+
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -53,6 +56,9 @@ public class MainSearchFragment extends Fragment implements PagedRecyclerViewAda
 	View include_empty;
 
 	SearchViewModel viewModel;
+	SearchTermViewModel searchTermViewModel;
+
+	SearchCursorAdapter searchCursorAdapter;
 
 	@Inject
 	ViewModelProvider.Factory viewModelFactory;
@@ -70,8 +76,13 @@ public class MainSearchFragment extends Fragment implements PagedRecyclerViewAda
 	{
 		super.onActivityCreated(savedInstanceState);
 		viewModel = ViewModelProviders.of(this, viewModelFactory).get(SearchViewModel.class);
+		searchTermViewModel = ViewModelProviders.of(this, viewModelFactory).get(SearchTermViewModel.class);
+		searchCursorAdapter = new SearchCursorAdapter(getContext());
 		setupObserver(viewModel);
+		setupObserver(searchTermViewModel);
 	}
+
+
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
@@ -141,6 +152,18 @@ public class MainSearchFragment extends Fragment implements PagedRecyclerViewAda
 		});
 	}
 
+	private void setupObserver(SearchTermViewModel searchTermViewModel)
+	{
+		searchTermViewModel.getDataObservable().observe(this, new Observer<List<String>>()
+		{
+			@Override
+			public void onChanged(@Nullable List<String> strings)
+			{
+				searchCursorAdapter.onNewData(strings);
+			}
+		});
+	}
+
 	private void showEmtpyState()
 	{
 		include_empty.setVisibility(View.VISIBLE);
@@ -187,8 +210,8 @@ public class MainSearchFragment extends Fragment implements PagedRecyclerViewAda
 		searchView.setOnCloseListener(this);
 		searchView.setOnSuggestionListener(this);
 
-		//searchCursorAdapter = new SearchCursorAdapter(this);
-		//searchView.setSuggestionsAdapter(searchCursorAdapter);
+		searchCursorAdapter = new SearchCursorAdapter(getContext());
+		searchView.setSuggestionsAdapter(searchCursorAdapter);
 
 		super.onCreateOptionsMenu(menu, inflater);
 	}
@@ -210,6 +233,7 @@ public class MainSearchFragment extends Fragment implements PagedRecyclerViewAda
 	@Override
 	public boolean onQueryTextChange(String newText)
 	{
+		searchTermViewModel.setQuery(newText);
 		return false;
 	}
 
@@ -223,13 +247,15 @@ public class MainSearchFragment extends Fragment implements PagedRecyclerViewAda
 	@Override
 	public boolean onSuggestionSelect(int position)
 	{
-		//searchCursorAdapter.setQuery(newText);
+
 		return false;
 	}
 
 	@Override
 	public boolean onSuggestionClick(int position)
 	{
+		String qStr = searchCursorAdapter.getSuggestion(position);
+		onQueryTextSubmit(qStr);
 		return false;
 	}
 

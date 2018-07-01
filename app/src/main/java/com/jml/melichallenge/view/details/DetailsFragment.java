@@ -6,11 +6,11 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.graphics.Paint;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -115,7 +115,7 @@ public class DetailsFragment extends Fragment
 	}
 
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
+	public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
 	{
 		View view = inflater.inflate(R.layout.details_fragment, container, false);
 		ButterKnife.bind(this, view);
@@ -173,15 +173,24 @@ public class DetailsFragment extends Fragment
 			@Override
 			public void onChanged(@Nullable ErrorWrapper errorWrapper)
 			{
-				// TODO
-				Toast.makeText(getContext(), errorWrapper.getMessage(), Toast.LENGTH_SHORT);
+				if(errorWrapper == null)
+				{
+					return;
+				}
+
+				String errorMsg = errorWrapper.getMessage();
+
+				if(errorMsg != null)
+				{
+					Toast.makeText(getContext(), errorMsg, Toast.LENGTH_SHORT).show();
+				}
 			}
 		});
 	}
 
 	private void setupObserver(DescriptionViewModel descriptionViewModel)
 	{
-		// Update the list when the data changes
+		// Update the list when the data changesCannot find setter for field.
 		descriptionViewModel.getDataObservable().observe(this, new Observer<Description>()
 		{
 			@Override
@@ -205,8 +214,17 @@ public class DetailsFragment extends Fragment
 			@Override
 			public void onChanged(@Nullable ErrorWrapper errorWrapper)
 			{
-				// TODO
-				Toast.makeText(getContext(), errorWrapper.getMessage(), Toast.LENGTH_SHORT);
+				if(errorWrapper == null)
+				{
+					return;
+				}
+
+				String errorMsg = errorWrapper.getMessage();
+
+				if(errorMsg != null)
+				{
+					Toast.makeText(getContext(), errorMsg, Toast.LENGTH_SHORT).show();
+				}
 			}
 		});
 	}
@@ -229,7 +247,7 @@ public class DetailsFragment extends Fragment
 	private void setupPictues(Item item)
 	{
 
-		if (item.hasPictures())
+		if (item.hasPictures() && getContext() != null)
 		{
 			GlideApp.with(getContext()).load(item.getPictures().get(0).getUrl()).centerCrop().into(iv_tempImage);
 		}
@@ -247,7 +265,11 @@ public class DetailsFragment extends Fragment
 			tv_originalPrice.setPaintFlags(tv_originalPrice.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
 
 			tv_discount.setVisibility(View.VISIBLE);
-			tv_discount.setText(Item.FormatHelper.formatDiscount(getContext(), item.getDiscount()));
+
+			if(getContext() != null)
+			{
+				tv_discount.setText(Item.FormatHelper.formatDiscount(getContext(), item.getDiscount()));
+			}
 		}
 		else
 		{
@@ -288,7 +310,10 @@ public class DetailsFragment extends Fragment
 
 	private void setupSeller(Item item)
 	{
-		tv_sellerLocationText.setText(SellerAddress.FormatHelper.format(getContext(), item.getSellerAddress()));
+		if(getContext() != null)
+		{
+			tv_sellerLocationText.setText(SellerAddress.FormatHelper.format(getContext(), item.getSellerAddress()));
+		}
 	}
 
 	private void setupWarranty(Item item)
