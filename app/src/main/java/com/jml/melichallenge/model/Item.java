@@ -10,6 +10,7 @@ import com.jml.melichallenge.R;
 
 import java.lang.reflect.Type;
 import java.text.NumberFormat;
+import java.util.Collections;
 import java.util.Currency;
 import java.util.List;
 import java.util.Locale;
@@ -82,6 +83,51 @@ public class Item
 	public String getId()
 	{
 		return dto.id;
+	}
+
+	public boolean hasPictures()
+	{
+		return dto.pictures != null && dto.pictures.size() > 0;
+	}
+
+	public List<Picture> getPictures()
+	{
+		return Collections.unmodifiableList(dto.pictures);
+	}
+
+	public String getCondition()
+	{
+		return dto.condition;
+	}
+
+	public SellerAddress getSellerAddress()
+	{
+		return dto.seller_address;
+	}
+
+	public boolean hasAnyWarranty()
+	{
+		return  acceptsMercadoPago() || hasCustomWarranty();
+	}
+
+	public boolean acceptsMercadoPago()
+	{
+		return dto.accepts_mercadopago;
+	}
+
+	public boolean hasCustomWarranty()
+	{
+		return dto.warranty != null && !dto.warranty.isEmpty();
+	}
+
+	public String getCustomWarranty()
+	{
+		return dto.warranty;
+	}
+
+	public List<Attribute> getAttributes()
+	{
+		return dto.attributes;
 	}
 
 	private static class DTO

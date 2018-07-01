@@ -8,7 +8,6 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.jml.melichallenge.GlideApp;
-import com.jml.melichallenge.MeLiGlideApp;
 import com.jml.melichallenge.R;
 import com.jml.melichallenge.model.Item;
 import com.jml.melichallenge.view.common.RecyclerViewClickListener;
@@ -19,7 +18,7 @@ import butterknife.ButterKnife;
 
 public class SearchItemViewHolder extends PagedViewHolder implements View.OnClickListener
 {
-	@BindView(R.id.tv_name)
+	@BindView(R.id.tv_title)
 	TextView tv_name;
 
 	@BindView(R.id.tv_price)

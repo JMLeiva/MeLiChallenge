@@ -1,5 +1,7 @@
 package com.jml.melichallenge.di;
 
+import com.jml.melichallenge.view.details.DetailsActivity;
+import com.jml.melichallenge.view.details.DetailsFragment;
 import com.jml.melichallenge.view.mainsearch.MainSearchActivity;
 import com.jml.melichallenge.view.mainsearch.MainSearchFragment;
 
@@ -13,6 +15,11 @@ public abstract class BuildersModule {
 	abstract MainSearchActivity bindMainSearchActivity();
 
 	@ContributesAndroidInjector
+	abstract DetailsActivity bindDetailsActivity();
+
+	@ContributesAndroidInjector
 	abstract MainSearchFragment bindMainSearchFragment();
-	// Add bindings for other sub-components here
+
+	@ContributesAndroidInjector
+	abstract DetailsFragment bindDetailsFragment();
 }

@@ -6,6 +6,7 @@ import android.content.Context;
 import com.jml.melichallenge.MeLiApplication;
 import com.jml.melichallenge.network.MeLiApi;
 import com.jml.melichallenge.network.MeLiApiImpl;
+import com.jml.melichallenge.repository.DescriptionRepository;
 import com.jml.melichallenge.repository.ItemRepository;
 import javax.inject.Singleton;
 import dagger.Module;
@@ -33,5 +34,11 @@ public class MeLiAppModule
 	@Provides
 	ItemRepository providesItemRepository(MeLiApi meLiApi) {
 		return new ItemRepository(meLiApi);
+	}
+
+	@Singleton
+	@Provides
+	DescriptionRepository providesDescriptionRepository(MeLiApi meLiApi) {
+		return new DescriptionRepository(meLiApi);
 	}
 }
