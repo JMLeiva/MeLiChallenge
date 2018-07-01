@@ -6,11 +6,8 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.graphics.Paint;
 import android.os.Build;
 import android.os.Bundle;
-<<<<<<< HEAD
 import android.support.annotation.NonNull;
-=======
 import android.os.Parcelable;
->>>>>>> master
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -256,12 +253,7 @@ public class DetailsFragment extends Fragment
 
 	private void setupGallery(final Item item)
 	{
-<<<<<<< HEAD
-
-		if (item.hasPictures() && getContext() != null)
-=======
-		galleryAdapter = new GalleryAdapter(getFragmentManager(), item.getPictures(), new GalleryAdapter.OnItemClickListener()
->>>>>>> master
+		galleryAdapter = new GalleryAdapter(getChildFragmentManager(), item.getPictures(), new GalleryAdapter.OnItemClickListener()
 		{
 			@Override
 			public void onItemClick()

@@ -60,6 +60,8 @@ public class MainSearchFragment extends Fragment implements PagedRecyclerViewAda
 
 	SearchCursorAdapter searchCursorAdapter;
 
+	SearchView searchView;
+
 	@Inject
 	ViewModelProvider.Factory viewModelFactory;
 
@@ -201,7 +203,7 @@ public class MainSearchFragment extends Fragment implements PagedRecyclerViewAda
 		MenuItem searchMenuItem = menu.findItem(R.id.action_search);
 
 		// Setup SearchView
-		SearchView searchView = (SearchView) searchMenuItem.getActionView();
+		searchView = (SearchView) searchMenuItem.getActionView();
 
 		searchView.setQueryHint(getContext().getString(R.string.main_search_hint));
 		searchView.setSearchableInfo(searchManager.getSearchableInfo(getActivity().getComponentName()));
@@ -226,6 +228,7 @@ public class MainSearchFragment extends Fragment implements PagedRecyclerViewAda
 
 		adapter.clear();
 		viewModel.setQuery(new SearchQuery.Builder().site("MLA").qStr(query).pageSize(10).build());
+		searchTermViewModel.addNewTerm(query);
 		showResults();
 		return false;
 	}
@@ -255,7 +258,7 @@ public class MainSearchFragment extends Fragment implements PagedRecyclerViewAda
 	public boolean onSuggestionClick(int position)
 	{
 		String qStr = searchCursorAdapter.getSuggestion(position);
-		onQueryTextSubmit(qStr);
+		searchView.setQuery(qStr, true);
 		return false;
 	}
 

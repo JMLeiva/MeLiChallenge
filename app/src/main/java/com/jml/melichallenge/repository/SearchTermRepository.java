@@ -18,16 +18,14 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 @Singleton
-public class SearchTermlRepository
+public class SearchTermRepository
 {
 	// Simple in memoryCache
-	Map<String, List<SearchTerm>> memoryCache;
 	private MeLiDatabase meLiDatabase;
 
 	@Inject
-	public SearchTermlRepository(MeLiDatabase meLiDatabase)
+	public SearchTermRepository(MeLiDatabase meLiDatabase)
 	{
-		memoryCache = new HashMap<>();
 		this.meLiDatabase = meLiDatabase;
 	}
 
@@ -35,17 +33,7 @@ public class SearchTermlRepository
 	{
 		final MediatorLiveData<List<SearchTerm>> data = new MediatorLiveData<>();
 
-		List<SearchTerm> memItem = memoryCache.get(qStr);
-
-		if(memItem != null)
-		{
-			data.setValue(memItem);
-		}
-
-
-
-
-		data.addSource(meLiDatabase.searchTermDao().findLike(qStr), new Observer<List<SearchTerm>>()
+		data.addSource(meLiDatabase.searchTermDao().findLike("%" + qStr + "%"), new Observer<List<SearchTerm>>()
 		{
 			@Override
 			public void onChanged(@Nullable List<SearchTerm> searchTerms)
@@ -60,6 +48,5 @@ public class SearchTermlRepository
 	public void addNew(String qStr)
 	{
 		meLiDatabase.searchTermDao().insert(new SearchTerm(qStr));
-		memoryCache.get(qStr).add(new SearchTerm(qStr));
 	}
 }

@@ -1,7 +1,6 @@
 package com.jml.melichallenge.di;
 
 import android.app.Application;
-import android.arch.persistence.room.Room;
 import android.content.Context;
 
 import com.jml.melichallenge.MeLiApplication;
@@ -9,7 +8,7 @@ import com.jml.melichallenge.network.MeLiApi;
 import com.jml.melichallenge.network.MeLiApiImpl;
 import com.jml.melichallenge.repository.DescriptionRepository;
 import com.jml.melichallenge.repository.ItemRepository;
-import com.jml.melichallenge.repository.SearchTermlRepository;
+import com.jml.melichallenge.repository.SearchTermRepository;
 import com.jml.melichallenge.repository.persistence.MeLiDatabase;
 import com.jml.melichallenge.utils.BackgroundRunner;
 
@@ -62,7 +61,7 @@ public class MeLiAppModule
 
 	@Singleton
 	@Provides
-	SearchTermlRepository providesSearchTermRepository(MeLiDatabase meLiDatabase) {
-		return new SearchTermlRepository(meLiDatabase);
+	SearchTermRepository providesSearchTermRepository(MeLiDatabase meLiDatabase) {
+		return new SearchTermRepository(meLiDatabase);
 	}
 }
