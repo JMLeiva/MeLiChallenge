@@ -5,4 +5,15 @@
     <string name="main_search_hint">Search on Mercado Libre</string>
     <string name="discount_fmt">%1$d\%% OFF</string>
     <string name="reviewTotal_fmt">(%1$d)</string>
+    <string name="item">Item</string>
+    <string name="payment_text">Pay in up to 12 installments</string>
+    <string name="payment_learn_more">&lt;a href="https://www.mercadopago.com.ar/ayuda/medios-de-pago-cuotas-promociones_264">Learn more&lt;/a></string>
+    <string name="location">Location</string>
+    <string name="location_fmt">%1$s, %2$s, %3$s</string>
+    <string name="warranty">Warranty</string>
+    <string name="warranty_mercadoPagoTitle">Proteted purchase with Mercado Pago</string>
+    <string name="warranty_mercadoPagoDescription">Receive the product you\'re expecting or we give you a refund.</string>
+    <string name="warranty_customTitle">Seller warranty</string>
+    <string name="attributes">Attributes</string>
+    <string name="description">Description</string>
 </resources>

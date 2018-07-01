@@ -1,4 +1,4 @@
-package com.jml.melichallenge.view.mainsearch.viewmodel;
+package com.jml.melichallenge.view.details;
 
 import android.app.Application;
 import android.arch.core.util.Function;
@@ -16,18 +16,21 @@ import javax.inject.Inject;
 
 public class ItemViewModel extends BaseViewModel<Item>
 {
-	private final MutableLiveData<String> itemIdInput = new MutableLiveData();
-	@Inject
-	ItemRepository itemRepository;
+	private MutableLiveData<String> itemIdInput;
+	private ItemRepository itemRepository;
 
-	public ItemViewModel(Application application)
+	@Inject
+	public ItemViewModel(Application application, ItemRepository itemRepository)
 	{
 		super(application);
+		this.itemRepository = itemRepository;
 	}
 
 	@Override
 	protected LiveData<Item> createDataObservable()
 	{
+		itemIdInput = new MutableLiveData<>();
+
 		return Transformations.switchMap(itemIdInput, new Function<String, LiveData<Item>>()
 		{
 			@Override

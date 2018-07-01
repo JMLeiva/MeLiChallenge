@@ -3,7 +3,9 @@ package com.jml.melichallenge.di;
 import android.arch.lifecycle.ViewModel;
 import android.arch.lifecycle.ViewModelProvider;
 
-import com.jml.melichallenge.view.mainsearch.viewmodel.SearchViewModel;
+import com.jml.melichallenge.view.details.DescriptionViewModel;
+import com.jml.melichallenge.view.details.ItemViewModel;
+import com.jml.melichallenge.view.mainsearch.SearchViewModel;
 
 import dagger.Binds;
 import dagger.Module;
@@ -16,6 +18,16 @@ public abstract class ViewModelModule
 	@IntoMap
 	@ViewModelKey(SearchViewModel.class)
 	abstract ViewModel bindSearchViewModel(SearchViewModel searchViewModel);
+
+	@Binds
+	@IntoMap
+	@ViewModelKey(ItemViewModel.class)
+	abstract ViewModel bindItemModel(ItemViewModel itemViewModel);
+
+	@Binds
+	@IntoMap
+	@ViewModelKey(DescriptionViewModel.class)
+	abstract ViewModel bindDescriptionViewModel(DescriptionViewModel itemViewModel);
 
 	@Binds
 	abstract ViewModelProvider.Factory bindViewModelFactory(MeLiViewModelProviderFactory factory);

@@ -5,6 +5,7 @@ import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -26,10 +27,9 @@ import com.jml.melichallenge.model.RequestState;
 import com.jml.melichallenge.model.SearchQuery;
 import com.jml.melichallenge.model.SearchResult;
 import com.jml.melichallenge.repository.ErrorWrapper;
-import com.jml.melichallenge.repository.ItemRepository;
 import com.jml.melichallenge.view.common.AdapterClickListener;
+import com.jml.melichallenge.view.details.DetailsActivity;
 import com.jmleiva.pagedrecyclerview.PagedRecyclerViewAdapter;
-import com.jml.melichallenge.view.mainsearch.viewmodel.SearchViewModel;
 
 import javax.inject.Inject;
 
@@ -132,18 +132,6 @@ public class MainSearchFragment extends Fragment implements PagedRecyclerViewAda
 	}
 
 	@Override
-	public void onResume()
-	{
-		super.onResume();
-	}
-
-	@Override
-	public void onPause()
-	{
-		super.onPause();
-	}
-
-	@Override
 	public void loadNewPage()
 	{
 		viewModel.advance();
@@ -236,6 +224,9 @@ public class MainSearchFragment extends Fragment implements PagedRecyclerViewAda
 	@Override
 	public void onClick(Item item)
 	{
-		// TODO
+		Intent intent = new Intent(getContext(), DetailsActivity.class);
+		intent.putExtra(DetailsActivity.ITEM_ID_EXTRA, item.getId());
+
+		startActivity(intent);
 	}
 }

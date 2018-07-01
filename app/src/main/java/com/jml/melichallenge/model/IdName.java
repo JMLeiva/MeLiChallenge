@@ -16,6 +16,11 @@ public class IdName
 		this.dto = dto;
 	}
 
+	public Object getName()
+	{
+		return dto.name;
+	}
+
 	private static class DTO
 	{
 		private String id;

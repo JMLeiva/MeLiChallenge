@@ -22,6 +22,8 @@
             <meta-data android:name="android.app.default_searchable"
                        android:value=".view.mainsearch.MainSearchActivity"/>
         </activity>
+
+        <activity android:name=".view.details.DetailsActivity"/>
     </application>
 
 </manifest>

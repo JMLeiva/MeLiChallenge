@@ -1,4 +1,4 @@
-package com.jml.melichallenge.view.mainsearch.viewmodel;
+package com.jml.melichallenge.view.mainsearch;
 
 import android.app.Application;
 import android.arch.core.util.Function;
@@ -18,10 +18,8 @@ import javax.inject.Inject;
 public class SearchViewModel extends BaseViewModel<SearchResult>
 {
 	private MutableLiveData<SearchQuery> searchQueryInput;
-
-	ItemRepository itemRepository;
-
-	SearchQuery query;
+	private ItemRepository itemRepository;
+	private SearchQuery query;
 
 	@Inject
 	public SearchViewModel(Application application, ItemRepository itemRepository)

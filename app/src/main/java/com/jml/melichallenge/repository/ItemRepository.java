@@ -9,16 +9,24 @@ import com.jml.melichallenge.model.SearchResult;
 import com.jml.melichallenge.network.ApiCallback;
 import com.jml.melichallenge.network.MeLiApi;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
 @Singleton
 public class ItemRepository extends Repository
 {
+	// Simple in memoryCache
+	Map<String, Item> memoryCache;
+
 	@Inject
 	public ItemRepository(MeLiApi api)
 	{
 		super(api);
+		memoryCache = new HashMap<>();
 	}
 
 	public LiveData<ResponseWrapper<SearchResult>> search(SearchQuery searchQuery)
@@ -30,6 +38,7 @@ public class ItemRepository extends Repository
 			@Override
 			public void onResponse(SearchResult response)
 			{
+				updateMemoryCache(response.getResults());
 				data.setValue(ResponseWrapper.successfullResponse(response));
 			}
 
@@ -47,11 +56,19 @@ public class ItemRepository extends Repository
 	{
 		final MutableLiveData<ResponseWrapper<Item>> data = new MutableLiveData<>();
 
+		Item memItem = memoryCache.get(itemId);
+
+		if(memItem != null)
+		{
+			data.setValue(ResponseWrapper.successfullResponse(memItem));
+		}
+
 		getApi().getItem(itemId,  new ApiCallback<Item>()
 		{
 			@Override
 			public void onResponse(Item response)
 			{
+				updateMemoryCache(response);
 				data.setValue(ResponseWrapper.successfullResponse(response));
 			}
 
@@ -63,5 +80,18 @@ public class ItemRepository extends Repository
 		});
 
 		return data;
+	}
+
+	private void updateMemoryCache(List<Item> items)
+	{
+		for(Item item : items)
+		{
+			updateMemoryCache(item);
+		}
+	}
+
+	private void updateMemoryCache(Item item)
+	{
+		memoryCache.put(item.getId(), item);
 	}
 }

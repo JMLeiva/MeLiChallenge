@@ -16,6 +16,16 @@ public class Attribute
 		this.dto = dto;
 	}
 
+	public String getName()
+	{
+		return dto.name;
+	}
+
+	public String getValue()
+	{
+		return dto.value_name;
+	}
+
 	private static class DTO
 	{
 		private String id;
