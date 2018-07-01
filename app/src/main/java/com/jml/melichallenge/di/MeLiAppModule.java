@@ -8,6 +8,10 @@ import com.jml.melichallenge.network.MeLiApi;
 import com.jml.melichallenge.network.MeLiApiImpl;
 import com.jml.melichallenge.repository.DescriptionRepository;
 import com.jml.melichallenge.repository.ItemRepository;
+import com.jml.melichallenge.repository.SearchTermRepository;
+import com.jml.melichallenge.repository.persistence.MeLiDatabase;
+import com.jml.melichallenge.utils.BackgroundRunner;
+
 import javax.inject.Singleton;
 import dagger.Module;
 import dagger.Provides;
@@ -30,7 +34,6 @@ public class MeLiAppModule
 		return new MeLiApiImpl();
 	}
 
-	@Singleton
 	@Provides
 	ItemRepository providesItemRepository(MeLiApi meLiApi) {
 		return new ItemRepository(meLiApi);
@@ -38,7 +41,27 @@ public class MeLiAppModule
 
 	@Singleton
 	@Provides
+	MeLiDatabase providesMeLiDatabase(Context context) {
+		return MeLiDatabase.create(context);
+	}
+
+	@Singleton
+	@Provides
 	DescriptionRepository providesDescriptionRepository(MeLiApi meLiApi) {
 		return new DescriptionRepository(meLiApi);
+	}
+
+
+	@Singleton
+	@Provides
+	BackgroundRunner providesBackgroundRunner()
+	{
+		return new BackgroundRunner();
+	}
+
+	@Singleton
+	@Provides
+	SearchTermRepository providesSearchTermRepository(MeLiDatabase meLiDatabase) {
+		return new SearchTermRepository(meLiDatabase);
 	}
 }

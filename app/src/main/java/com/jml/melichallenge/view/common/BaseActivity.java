@@ -3,6 +3,7 @@ package com.jml.melichallenge.view.common;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 
 import com.jml.melichallenge.R;
 
@@ -37,4 +38,18 @@ public abstract class BaseActivity extends DaggerAppCompatActivity
 
 	protected abstract void createFragment();
 	protected abstract String getFragmentTag();
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item)
+	{
+
+		switch (item.getItemId())
+		{
+			case android.R.id.home:
+				onBackPressed();
+				return true;
+			default:
+				return super.onOptionsItemSelected(item);
+		}
+	}
 }

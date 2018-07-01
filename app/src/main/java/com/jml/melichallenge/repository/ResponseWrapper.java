@@ -33,14 +33,14 @@ public class ResponseWrapper<T>
 
 	public static<T> ResponseWrapper<T> successfullResponse(T data)
 	{
-		ResponseWrapper result = new ResponseWrapper();
+		ResponseWrapper<T> result = new ResponseWrapper<>();
 		result.data = data;
 		return result;
 	}
 
 	public static <T> ResponseWrapper<T> errorResponse(int code, String message)
 	{
-		ResponseWrapper result = new ResponseWrapper();
+		ResponseWrapper<T> result = new ResponseWrapper<>();
 		result.errorWrapper = new ErrorWrapper(code, message);
 		return result;
 	}

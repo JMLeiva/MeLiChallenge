@@ -20,7 +20,9 @@
 
             <!-- enable the search dialog to send searches to SearchableActivity -->
             <meta-data android:name="android.app.default_searchable"
-                       android:value=".view.mainsearch.MainSearchActivity"/>
+                       android:value=".view.mainsearch.MainSearchActivity"
+                       android:searchSuggestThreshold="1"
+                       android:completionThreshold = "1" />
         </activity>
 
         <activity android:name=".view.details.DetailsActivity"/>
