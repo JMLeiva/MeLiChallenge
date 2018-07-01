@@ -20,6 +20,7 @@ public class SearchViewModel extends BaseViewModel<SearchResult>
 	private MutableLiveData<SearchQuery> searchQueryInput;
 	private ItemRepository itemRepository;
 	private SearchQuery query;
+	SearchResult currentResults;
 
 	@Inject
 	public SearchViewModel(Application application, ItemRepository itemRepository)
@@ -46,6 +47,7 @@ public class SearchViewModel extends BaseViewModel<SearchResult>
 					{
 						if(input.isSuccessfull())
 						{
+							currentResults = input.getData();
 							requestStateObservable.setValue(RequestState.SUCCESS);
 							return input.getData();
 						}
@@ -61,8 +63,14 @@ public class SearchViewModel extends BaseViewModel<SearchResult>
 		});
 	}
 
+	public SearchResult getCurrentSearchResult()
+	{
+		return currentResults;
+	}
+
 	public void setQuery(SearchQuery query)
 	{
+		currentResults = null;
 		this.query = query;
 	}
 

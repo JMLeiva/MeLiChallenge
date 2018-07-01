@@ -1,3 +1,17 @@
 <resources>
+    <string name="app_name">MeLiChallenge</string>
+    <string name="action_about">Acerca de</string>
+    <string name="menu_search">Buscar</string>
     <string name="main_search_hint">Buscar en Mercado Libre</string>
+    <string name="item">Producto</string>
+    <string name="payment_text">Pagá en hasta 12 cuotas</string>
+    <string name="payment_learn_more">&lt;a href="https://www.mercadopago.com.ar/ayuda/medios-de-pago-cuotas-promociones_264">Ver más&lt;/a></string>
+    <string name="location">Ubicación</string>
+    <string name="warranty">Garantía</string>
+    <string name="warranty_mercadoPagoTitle">Protegido por Mercado Pago</string>
+    <string name="warranty_mercadoPagoDescription">Recibí el producto que estás esperando o te devolvemos tu dinero.</string>
+    <string name="warranty_customTitle">Garantía del vendedor</string>
+    <string name="attributes">Características</string>
+    <string name="description">Descripción</string>
+    <string name="search_welcomeText">Bienvenido a MeLiChallenge, intentá buscar algo para comenzar.</string>
 </resources>
