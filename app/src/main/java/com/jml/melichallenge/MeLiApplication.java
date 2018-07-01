@@ -2,8 +2,9 @@ package com.jml.melichallenge;
 
 import android.app.Activity;
 import android.app.Application;
-import android.support.v4.app.Fragment;
 
+import com.github.piasy.biv.BigImageViewer;
+import com.github.piasy.biv.loader.glide.GlideImageLoader;
 import com.jml.melichallenge.di.DaggerMeLiAppComponent;
 
 import javax.inject.Inject;
@@ -26,6 +27,7 @@ public class MeLiApplication extends Application implements HasActivityInjector
 				.inject(this);
 
 
+		BigImageViewer.initialize(GlideImageLoader.with(this));
 	}
 
 	@Override

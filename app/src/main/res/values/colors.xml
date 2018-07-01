@@ -11,4 +11,5 @@
     <color name="greyBackground">#FAFAFA</color>\
     <color name="linkBlue">#0000AA</color>
     <color name="transparent">#00000000</color>
+    <color name="black">#FF000000</color>
 </resources>
