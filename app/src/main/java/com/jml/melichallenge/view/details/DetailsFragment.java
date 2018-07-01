@@ -1,5 +1,6 @@
 package com.jml.melichallenge.view.details;
 
+import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
@@ -19,13 +20,11 @@ import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.GridLayout;
-import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.jml.melichallenge.GlideApp;
 import com.jml.melichallenge.R;
 import com.jml.melichallenge.model.Attribute;
 import com.jml.melichallenge.model.Description;
@@ -33,6 +32,7 @@ import com.jml.melichallenge.model.Item;
 import com.jml.melichallenge.model.RequestState;
 import com.jml.melichallenge.model.SellerAddress;
 import com.jml.melichallenge.repository.ErrorWrapper;
+import com.jml.melichallenge.view.description.DescriptionFragment;
 import com.jml.melichallenge.view.gallery.GalleryAdapter;
 import com.jml.melichallenge.view.gallery.GalleryFragment;
 
@@ -253,8 +253,9 @@ public class DetailsFragment extends Fragment
 
 	private void setupGallery(final Item item)
 	{
-		galleryAdapter = new GalleryAdapter(getChildFragmentManager(), item.getPictures(), new GalleryAdapter.OnItemClickListener()
+		GalleryAdapter.OnItemClickListener listener = new GalleryAdapter.OnItemClickListener()
 		{
+
 			@Override
 			public void onItemClick()
 			{
@@ -272,7 +273,9 @@ public class DetailsFragment extends Fragment
 						.addToBackStack(null)
 						.commit();
 			}
-		});
+		};
+
+		galleryAdapter = new GalleryAdapter(getChildFragmentManager(), item.getPictures(), listener);
 
 		vp_gallery.setAdapter(galleryAdapter);
 	}
@@ -383,7 +386,24 @@ public class DetailsFragment extends Fragment
 			@Override
 			public void onClick(View v)
 			{
-				// TODO
+				LiveData<Item> itemliveData = viewModel.getDataObservable();
+
+				if(itemliveData != null && itemliveData.getValue() != null)
+				{
+
+					DescriptionFragment galleryFragment = new DescriptionFragment();
+					Bundle args = new Bundle();
+					args.putString(ITEM_ID_EXTRA, itemliveData.getValue().getId());
+					galleryFragment.setArguments(args);
+
+					getFragmentManager()
+							.beginTransaction()
+							.setReorderingAllowed(true)
+							//.addSharedElement(imageView, imageView.getTransitionName())
+							.replace(R.id.fragmentContainer, galleryFragment, DescriptionFragment.class.getSimpleName())
+							.addToBackStack(null)
+							.commit();
+				}
 			}
 		});
 	}
