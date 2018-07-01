@@ -88,7 +88,8 @@ public class SearchItemViewHolder extends PagedViewHolder implements View.OnClic
 		GlideApp.with(context)
 				.load(item.getThumbnail())
 				.centerCrop()
-				//.placeholder(R.drawable.thumb_placeholder)
+				.placeholder(R.drawable.ic_photo_96dp)
+				.error(R.drawable.ic_broken_image_96dp)
 				.into(iv_thumbnail);
 	}
 
