@@ -1,5 +1,6 @@
 package com.jml.melichallenge.view.mainsearch;
 
+import android.app.Dialog;
 import android.app.SearchManager;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProvider;
@@ -13,13 +14,14 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.jml.melichallenge.R;
@@ -85,7 +87,6 @@ public class MainSearchFragment extends Fragment implements PagedRecyclerViewAda
 	}
 
 
-
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
 	{
@@ -122,7 +123,7 @@ public class MainSearchFragment extends Fragment implements PagedRecyclerViewAda
 				swiperefresh.setRefreshing(false);
 				adapter.stopLoading();
 
-				if(searchResult.getPaging().getTotal() == 0)
+				if (searchResult.getPaging().getTotal() == 0)
 				{
 					showEmtpyState();
 					return;
@@ -190,7 +191,7 @@ public class MainSearchFragment extends Fragment implements PagedRecyclerViewAda
 	{
 		SearchResult result = viewModel.getCurrentSearchResult();
 
-		if(result == null) return true;
+		if (result == null) return true;
 		return !result.getPaging().isFinished();
 	}
 
@@ -219,9 +220,22 @@ public class MainSearchFragment extends Fragment implements PagedRecyclerViewAda
 	}
 
 	@Override
+	public boolean onOptionsItemSelected(MenuItem item)
+	{
+		switch (item.getItemId())
+		{
+			case R.id.action_about:
+				createAboutDialog();
+				return true;
+			default:
+				return super.onOptionsItemSelected(item);
+		}
+	}
+
+	@Override
 	public boolean onQueryTextSubmit(String query)
 	{
-		if(query == null)
+		if (query == null)
 		{
 			return false;
 		}
@@ -264,7 +278,7 @@ public class MainSearchFragment extends Fragment implements PagedRecyclerViewAda
 
 	private void createAboutDialog()
 	{
-		/*Dialog progressDialog = new Dialog(getContext());
+		Dialog progressDialog = new Dialog(getContext());
 		progressDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
 		progressDialog.setContentView(R.layout.about_dialog);
 
@@ -272,7 +286,7 @@ public class MainSearchFragment extends Fragment implements PagedRecyclerViewAda
 		lp.dimAmount = 0.0f; // Dim level. 0.0 - no dim, 1.0 - completely opaque
 		progressDialog.getWindow().setAttributes(lp);
 		progressDialog.setCancelable(true);
-		progressDialog.show();*/
+		progressDialog.show();
 	}
 
 	@Override
