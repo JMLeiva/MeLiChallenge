@@ -18,4 +18,19 @@
     <string name="description">Description</string>
     <string name="search_welcomeText">Welcome to MeLiChallenge, try searching something to start.</string>
     <string name="search_emtpyStateText">Ups, there\'s no results for what you serached, try searching something else</string>
+    <string name="aboutTitle">MeLiChallenge by Juan Martin Leiva</string>
+    <string name="aboutBody">This is a demo app created by Juan Martin Leiva as a test for Mercado Libre (a.k.a. MeLi)\n\nThe app allows the user to perform a search in Mercado Libre, then you can see it\'s details.\n
+	\n Inside the details, you can see all the item pictures, and perform a zoom in them.
+        \n It also saves in disk your last searchs (the app comes with a simple preloaded data set), and shows as hint when typing in the search view.
+        \n\n The following Android componentes were used: \n   * Lifecycle  \n   * Room to persist data
+        \n\nThe following 3º party libraries were used:
+        \n   * Glide to handle picture loading and caching
+        \n   * Retrofit for the rest client
+        \n   * Gson to parse Json
+        \n   * okhttp3 to process http request (using Retrofit)
+        \n   * Butterknife for view binding
+        \n   * PagedRecyclerView (a work of my own) to display the paged lists
+        \n   * Dagger2 for dependency injection
+        \n   * BigImageViewer to perform pan and zoom in pictures
+    </string>
 </resources>

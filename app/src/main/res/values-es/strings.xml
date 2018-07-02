@@ -14,4 +14,19 @@
     <string name="attributes">Características</string>
     <string name="description">Descripción</string>
     <string name="search_welcomeText">Bienvenido a MeLiChallenge, intentá buscar algo para comenzar.</string>
+    <string name="aboutTitle">MeLiChallenge por Juan Martin Leiva</string>
+    <string name="aboutBody">Esta es una app demo creada por Juan Martin Leiva como desafío para Mercado Libre (a.k.a. MeLi)\n\nLa app permite al usuario realizar búsquedas en Mercado Libre (a través de su API pública), luego puede sus detalles.\n
+	\n En los detalles, puedes ver todas las imagenes del producto y hacerles zoom.
+        \n Tambien guarda en disco las búsquedas realziadas (la app viene con una lista de búsquedas pre-cargadas), y las muestra como sugerencias al realizar una búsqueda.
+        \n\n Los siguientes compoenentes de Android fueron utilziados: \n   * Lifecycle  \n   * Room para persistir data en disco
+        \n\nLas siguientes librerías de terceros fueron utilizadas:
+        \n   * Glide para el manejo de carga y caching de imágenes
+        \n   * Retrofit para el cliente REST
+        \n   * Gson para parsear Json
+        \n   * okhttp3 para procesar los HTTP requests (junto con Retrofit)
+        \n   * Butterknife para el View Binding
+        \n   * PagedRecyclerView (una libreria de autoria) para manajar listas paginadas
+        \n   * Dagger2 para inyección de dependencia
+        \n   * BigImageViewer para permitir el zoom y "panneo" de imágenes
+    </string>
 </resources>
