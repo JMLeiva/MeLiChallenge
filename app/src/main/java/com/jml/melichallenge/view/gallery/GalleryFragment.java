@@ -51,7 +51,7 @@ public class GalleryFragment extends Fragment
 
 		ButterKnife.bind(this, view);
 
-		GalleryAdapter adapter = new GalleryAdapter(getFragmentManager(), pictures);
+		GalleryAdapter adapter = new GalleryZoomAdapter(getFragmentManager(), pictures);
 		vp_gallery.setAdapter(adapter);
 
 		if(initialIndex < adapter.getCount())
