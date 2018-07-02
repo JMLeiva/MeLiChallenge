@@ -1,6 +1,9 @@
 package com.jml.melichallenge.model;
 
-public class SearchQuery
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class SearchQuery implements Parcelable
 {
 	private String site;
 	private String qStr;
@@ -10,6 +13,14 @@ public class SearchQuery
 	public SearchQuery()
 	{
 		offset = 0;
+	}
+
+	protected SearchQuery(Parcel in)
+	{
+		site = in.readString();
+		qStr = in.readString();
+		limit = in.readInt();
+		offset = in.readInt();
 	}
 
 	public String getQStr()
@@ -41,6 +52,36 @@ public class SearchQuery
 	{
 		this.offset = 0;
 	}
+
+	@Override
+	public int describeContents()
+	{
+		return 0;
+	}
+
+	@Override
+	public void writeToParcel(Parcel dest, int flags)
+	{
+		dest.writeString(site);
+		dest.writeString(qStr);
+		dest.writeInt(limit);
+		dest.writeInt(offset);
+	}
+
+	public static final Creator<SearchQuery> CREATOR = new Creator<SearchQuery>()
+	{
+		@Override
+		public SearchQuery createFromParcel(Parcel in)
+		{
+			return new SearchQuery(in);
+		}
+
+		@Override
+		public SearchQuery[] newArray(int size)
+		{
+			return new SearchQuery[size];
+		}
+	};
 
 	public static class Builder
 	{

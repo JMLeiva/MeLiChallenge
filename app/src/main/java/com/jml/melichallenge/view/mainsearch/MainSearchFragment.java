@@ -8,8 +8,10 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -44,6 +46,8 @@ import dagger.android.support.AndroidSupportInjection;
 
 public class MainSearchFragment extends Fragment implements PagedRecyclerViewAdapter.Paginator, SearchView.OnQueryTextListener, SearchView.OnCloseListener, SearchView.OnSuggestionListener, AdapterClickListener<Item>
 {
+	final static String SAVE_STATE_QUERY_STR = "jml.melichallenge.SAVE_STATE_QUERY_STR";
+
 	@BindView(R.id.recyclerView)
 	RecyclerView recyclerView;
 
@@ -67,12 +71,23 @@ public class MainSearchFragment extends Fragment implements PagedRecyclerViewAda
 	@Inject
 	ViewModelProvider.Factory viewModelFactory;
 
+	SearchQuery savedInstanceSearchQuery;
+
 	@Override
 	public void onCreate(Bundle savedInstanceState)
 	{
 		AndroidSupportInjection.inject(this);
 		super.onCreate(savedInstanceState);
 		setHasOptionsMenu(true);
+
+		if(savedInstanceState != null)
+		{
+			Object searchQuery = savedInstanceState.getParcelable(SAVE_STATE_QUERY_STR);
+			if(searchQuery instanceof  SearchQuery)
+			{
+				savedInstanceSearchQuery = (SearchQuery)searchQuery;
+			}
+		}
 	}
 
 	@Override
@@ -213,10 +228,20 @@ public class MainSearchFragment extends Fragment implements PagedRecyclerViewAda
 		searchView.setOnCloseListener(this);
 		searchView.setOnSuggestionListener(this);
 
+		super.onCreateOptionsMenu(menu, inflater);
+
+		if(savedInstanceSearchQuery != null)
+		{
+			savedInstanceSearchQuery.resetPaging();
+			searchMenuItem.expandActionView();
+			searchView.setQuery(savedInstanceSearchQuery.getQStr(), false);
+			viewModel.setQuery(savedInstanceSearchQuery);
+			showResults();
+			savedInstanceSearchQuery = null;
+		}
+
 		searchCursorAdapter = new SearchCursorAdapter(getContext());
 		searchView.setSuggestionsAdapter(searchCursorAdapter);
-
-		super.onCreateOptionsMenu(menu, inflater);
 	}
 
 	@Override
@@ -296,5 +321,11 @@ public class MainSearchFragment extends Fragment implements PagedRecyclerViewAda
 		intent.putExtra(DetailsActivity.ITEM_ID_EXTRA, item.getId());
 
 		startActivity(intent);
+	}
+
+	@Override
+	public void onSaveInstanceState(@NonNull Bundle outState)
+	{
+		outState.putParcelable(SAVE_STATE_QUERY_STR, viewModel.getQuery().getValue());
 	}
 }

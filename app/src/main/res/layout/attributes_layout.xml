@@ -21,15 +21,15 @@
             app:layout_constraintTop_toTopOf="parent"/>
 
 
-    <GridLayout
+    <android.support.v7.widget.GridLayout
         android:id="@+id/gl_attributes"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:columnCount="2"
+        app:columnCount="2"
         app:layout_constraintTop_toBottomOf="@+id/include_payment">
 
-    </GridLayout>
+    </android.support.v7.widget.GridLayout>
 </LinearLayout>
