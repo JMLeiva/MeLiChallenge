@@ -9,6 +9,7 @@ public class SearchQuery implements Parcelable
 	private String qStr;
 	private int limit;
 	private int offset;
+	private String sort;
 
 	public SearchQuery()
 	{
@@ -21,6 +22,7 @@ public class SearchQuery implements Parcelable
 		qStr = in.readString();
 		limit = in.readInt();
 		offset = in.readInt();
+		sort = in.readString();
 	}
 
 	public String getQStr()
@@ -66,6 +68,7 @@ public class SearchQuery implements Parcelable
 		dest.writeString(qStr);
 		dest.writeInt(limit);
 		dest.writeInt(offset);
+		dest.writeString(sort);
 	}
 
 	public static final Creator<SearchQuery> CREATOR = new Creator<SearchQuery>()
@@ -82,6 +85,16 @@ public class SearchQuery implements Parcelable
 			return new SearchQuery[size];
 		}
 	};
+
+	public String getSort()
+	{
+		return sort;
+	}
+
+	public void setSort(String sort)
+	{
+		this.sort = sort;
+	}
 
 	public static class Builder
 	{

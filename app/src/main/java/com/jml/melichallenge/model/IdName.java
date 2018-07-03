@@ -11,14 +11,26 @@ public class IdName
 {
 	private DTO dto;
 
-	public IdName(DTO dto)
+	IdName(DTO dto)
 	{
 		this.dto = dto;
 	}
 
-	public Object getName()
+	IdName(IdName other)
+	{
+		this.dto = new DTO();
+		this.dto.id = other.getId();
+		this.dto.name = other.getName();
+	}
+
+	public String getName()
 	{
 		return dto.name;
+	}
+
+	public String getId()
+	{
+		return dto.id;
 	}
 
 	private static class DTO

@@ -6,11 +6,14 @@ import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
@@ -25,6 +28,7 @@ import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.jml.melichallenge.R;
+import com.jml.melichallenge.model.IdName;
 import com.jml.melichallenge.model.Item;
 import com.jml.melichallenge.model.SearchQuery;
 import com.jml.melichallenge.model.SearchResult;
@@ -59,8 +63,7 @@ public class MainSearchFragment extends BaseFragment implements PagedRecyclerVie
 	@BindView(R.id.include_empty)
 	View include_empty;
 
-
-	SearchViewModel viewModel;
+	SearchViewModel searchViewModel;
 	SearchTermViewModel searchTermViewModel;
 
 	SearchCursorAdapter searchCursorAdapter;
@@ -92,10 +95,10 @@ public class MainSearchFragment extends BaseFragment implements PagedRecyclerVie
 	public void onActivityCreated(Bundle savedInstanceState)
 	{
 		super.onActivityCreated(savedInstanceState);
-		viewModel = ViewModelProviders.of(this, viewModelFactory).get(SearchViewModel.class);
+		searchViewModel = ViewModelProviders.of(this, viewModelFactory).get(SearchViewModel.class);
 		searchTermViewModel = ViewModelProviders.of(this, viewModelFactory).get(SearchTermViewModel.class);
 		searchCursorAdapter = new SearchCursorAdapter(getContext());
-		setupObserver(viewModel);
+		setupObserver(searchViewModel);
 		setupObserver(searchTermViewModel);
 	}
 
@@ -125,7 +128,7 @@ public class MainSearchFragment extends BaseFragment implements PagedRecyclerVie
 			@Override
 			public void onRefresh()
 			{
-				viewModel.resetPaging();
+				searchViewModel.resetPaging();
 			}
 		});
 	}
@@ -202,6 +205,7 @@ public class MainSearchFragment extends BaseFragment implements PagedRecyclerVie
 	{
 		include_empty.setVisibility(View.VISIBLE);
 		swiperefresh.setVisibility(View.GONE);
+		getActivity().invalidateOptionsMenu();
 		hideNoConnection();
 	}
 
@@ -211,6 +215,7 @@ public class MainSearchFragment extends BaseFragment implements PagedRecyclerVie
 		include_empty.setVisibility(View.GONE);
 		swiperefresh.setVisibility(View.VISIBLE);
 		hideNoConnection();
+		getActivity().invalidateOptionsMenu();
 	}
 
 	@Override
@@ -220,18 +225,19 @@ public class MainSearchFragment extends BaseFragment implements PagedRecyclerVie
 		include_empty.setVisibility(View.GONE);
 		swiperefresh.setVisibility(View.GONE);
 		include_welcome.setVisibility(View.GONE);
+		getActivity().invalidateOptionsMenu();
 	}
 
 	@Override
 	public void loadNewPage()
 	{
-		viewModel.advance();
+		searchViewModel.advance();
 	}
 
 	@Override
 	public boolean hasMoreData()
 	{
-		SearchResult result = viewModel.getCurrentSearchResult();
+		SearchResult result = searchViewModel.getCurrentSearchResult();
 
 		if (result == null) return true;
 		return !result.getPaging().isFinished();
@@ -265,7 +271,16 @@ public class MainSearchFragment extends BaseFragment implements PagedRecyclerVie
 			searchMenuItem.setVisible(false);
 		}
 
+
+
 		super.onCreateOptionsMenu(menu, inflater);
+	}
+
+	@Override
+	public void onPrepareOptionsMenu (Menu menu)
+	{
+		MenuItem sortMenuItem = menu.findItem(R.id.action_sort);
+		sortMenuItem.setVisible(searchViewModel.getCurrentSearchResult() != null);
 	}
 
 	@Override
@@ -276,6 +291,8 @@ public class MainSearchFragment extends BaseFragment implements PagedRecyclerVie
 			case R.id.action_about:
 				createAboutDialog();
 				return true;
+			case R.id.action_sort:
+				createSortDialog();
 			default:
 				return super.onOptionsItemSelected(item);
 		}
@@ -290,7 +307,7 @@ public class MainSearchFragment extends BaseFragment implements PagedRecyclerVie
 		}
 
 		adapter.clear();
-		viewModel.setQuery(new SearchQuery.Builder().site("MLA").qStr(query).pageSize(10).build());
+		searchViewModel.setQuery(new SearchQuery.Builder().site("MLA").qStr(query).pageSize(10).build());
 		searchTermViewModel.addNewTerm(query);
 		showResults();
 		return false;
@@ -313,7 +330,6 @@ public class MainSearchFragment extends BaseFragment implements PagedRecyclerVie
 	@Override
 	public boolean onSuggestionSelect(int position)
 	{
-
 		return false;
 	}
 
@@ -327,15 +343,43 @@ public class MainSearchFragment extends BaseFragment implements PagedRecyclerVie
 
 	private void createAboutDialog()
 	{
-		Dialog progressDialog = new Dialog(getContext());
-		progressDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-		progressDialog.setContentView(R.layout.about_dialog);
+		Dialog dialog = new Dialog(getContext());
+		dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+		dialog.setContentView(R.layout.about_dialog);
 
-		WindowManager.LayoutParams lp = progressDialog.getWindow().getAttributes();
+		WindowManager.LayoutParams lp = dialog.getWindow().getAttributes();
 		lp.dimAmount = 0.0f; // Dim level. 0.0 - no dim, 1.0 - completely opaque
-		progressDialog.getWindow().setAttributes(lp);
-		progressDialog.setCancelable(true);
-		progressDialog.show();
+		dialog.getWindow().setAttributes(lp);
+		dialog.setCancelable(true);
+		dialog.show();
+	}
+
+	private void createSortDialog()
+	{
+		if(searchViewModel.getCurrentSearchResult() == null)
+		{
+			return;
+		}
+
+		final SortAdapter sortAdapter = new SortAdapter(searchViewModel.getCurrentSearchResult());
+
+		AlertDialog.Builder builder = new AlertDialog.Builder(getContext()).
+				setSingleChoiceItems(sortAdapter, sortAdapter.checkedPosition(), new DialogInterface.OnClickListener()
+		{
+			@Override
+			public void onClick(DialogInterface dialog, int which)
+			{
+				IdName sort = sortAdapter.idNameAtPosition(which);
+				searchViewModel.setSorting(sort.getId());
+				adapter.clear();
+				dialog.dismiss();
+			}
+		});
+
+		builder.setCancelable(true);
+		builder.setTitle(R.string.sort);
+		builder.create().show();
+
 	}
 
 	@Override
@@ -350,6 +394,6 @@ public class MainSearchFragment extends BaseFragment implements PagedRecyclerVie
 	@Override
 	public void onSaveInstanceState(@NonNull Bundle outState)
 	{
-		outState.putParcelable(SAVE_STATE_QUERY_STR, viewModel.getQuery().getValue());
+		outState.putParcelable(SAVE_STATE_QUERY_STR, searchViewModel.getQuery().getValue());
 	}
 }
