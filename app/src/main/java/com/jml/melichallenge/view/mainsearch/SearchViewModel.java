@@ -104,4 +104,11 @@ public class SearchViewModel extends BaseViewModel<SearchResult>
 	{
 		return this.searchQueryInput;
 	}
+
+	public void setSorting(String sorting)
+	{
+		this.query.setSort(sorting);
+		query.resetPaging();
+		this.searchQueryInput.setValue(query);
+	}
 }

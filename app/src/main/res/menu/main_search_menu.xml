@@ -15,4 +15,10 @@
         appcompat:actionViewClass="android.support.v7.widget.SearchView"
         appcompat:showAsAction="always|collapseActionView"/>
 
+    <item
+        android:id="@+id/action_sort"
+        android:title="@string/sort"
+        android:icon="@drawable/ic_sort_24dp"
+        appcompat:showAsAction="ifRoom"/>
+
 </menu>

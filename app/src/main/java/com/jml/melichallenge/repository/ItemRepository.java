@@ -33,7 +33,7 @@ public class ItemRepository extends Repository
 	{
 		final MutableLiveData<ResponseWrapper<SearchResult>> data = new MutableLiveData<>();
 
-		getApi().search(searchQuery.getSite(), searchQuery.getQStr(), searchQuery.getOffset(), searchQuery.getLimit(),  new ApiCallback<SearchResult>()
+		getApi().search(searchQuery.getSite(), searchQuery.getQStr(), searchQuery.getOffset(), searchQuery.getLimit(), searchQuery.getSort(), new ApiCallback<SearchResult>()
 		{
 			@Override
 			public void onResponse(SearchResult response)

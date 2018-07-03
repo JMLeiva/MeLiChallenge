@@ -44,7 +44,8 @@ public class MeLiApiImpl implements MeLiApi
 		Call<SearchResult> search(@Path("site_id") String siteId,
 								  @Query("q") String qStr,
 								  @Query("offset") int offset,
-								  @Query("limit") int limit);
+								  @Query("limit") int limit,
+								  @Query("sort") String sort);
 
 
 		@GET(PATH_ITEM + "/{item_id}")
@@ -95,9 +96,9 @@ public class MeLiApiImpl implements MeLiApi
 
 	// API CALLS
 	@Override
-	public void search(String siteId, String qStr, int offset, int limit, final ApiCallback<SearchResult> callback)
+	public void search(String siteId, String qStr, int offset, int limit, String sort, final ApiCallback<SearchResult> callback)
 	{
-		makeCall(service.search(siteId, qStr, offset, limit), callback);
+		makeCall(service.search(siteId, qStr, offset, limit, sort), callback);
 	}
 
 	@Override
