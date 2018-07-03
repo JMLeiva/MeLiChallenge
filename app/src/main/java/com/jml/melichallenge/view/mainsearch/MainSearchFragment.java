@@ -26,7 +26,6 @@ import android.widget.Toast;
 
 import com.jml.melichallenge.R;
 import com.jml.melichallenge.model.Item;
-import com.jml.melichallenge.model.RequestState;
 import com.jml.melichallenge.model.SearchQuery;
 import com.jml.melichallenge.model.SearchResult;
 import com.jml.melichallenge.repository.ErrorWrapper;
@@ -63,7 +62,6 @@ public class MainSearchFragment extends BaseFragment implements PagedRecyclerVie
 	SearchTermViewModel searchTermViewModel;
 
 	SearchCursorAdapter searchCursorAdapter;
-
 	SearchView searchView;
 
 	@Inject
@@ -87,7 +85,6 @@ public class MainSearchFragment extends BaseFragment implements PagedRecyclerVie
 		setupObserver(viewModel);
 		setupObserver(searchTermViewModel);
 	}
-
 
 	@Override
 	public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
@@ -150,15 +147,6 @@ public class MainSearchFragment extends BaseFragment implements PagedRecyclerVie
 
 				showResults();
 				adapter.appendItems(searchResult.getResults());
-
-			}
-		});
-
-		viewModel.getStateObservable().observe(this, new Observer<RequestState>()
-		{
-			@Override
-			public void onChanged(@Nullable RequestState requestState)
-			{
 
 			}
 		});

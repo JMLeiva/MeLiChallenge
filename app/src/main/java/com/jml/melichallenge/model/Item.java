@@ -72,7 +72,7 @@ public class Item
 		if(dto.reviews == null) return false;
 
 
-		return dto.reviews.getTotal() > 200;
+		return dto.reviews.getTotal() > 0; // Customizable
 	}
 
 	public Reviews getReviews()

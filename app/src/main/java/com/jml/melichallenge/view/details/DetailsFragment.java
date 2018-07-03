@@ -15,8 +15,6 @@ import android.support.v4.view.ViewPager;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.GridLayout;
@@ -29,7 +27,6 @@ import com.jml.melichallenge.R;
 import com.jml.melichallenge.model.Attribute;
 import com.jml.melichallenge.model.Description;
 import com.jml.melichallenge.model.Item;
-import com.jml.melichallenge.model.RequestState;
 import com.jml.melichallenge.model.SellerAddress;
 import com.jml.melichallenge.repository.ErrorWrapper;
 import com.jml.melichallenge.view.common.BaseFragment;
@@ -146,12 +143,6 @@ public class DetailsFragment extends BaseFragment
 		descriptionViewModel = ViewModelProviders.of(this, viewModelFactory).get(DescriptionViewModel.class);
 		setupObserver(viewModel);
 		setupObserver(descriptionViewModel);
-	}
-
-	@Override
-	public void onResume()
-	{
-		super.onResume();
 
 		if(getArguments() != null)
 		{
@@ -159,6 +150,12 @@ public class DetailsFragment extends BaseFragment
 			viewModel.setItemId(itemIdExtra);
 			descriptionViewModel.setItemId(itemIdExtra);
 		}
+	}
+
+	@Override
+	public void onResume()
+	{
+		super.onResume();
 	}
 
 	private void setupObserver(ItemViewModel viewModel)
@@ -175,15 +172,6 @@ public class DetailsFragment extends BaseFragment
 				}
 
 				setupUI(item);
-			}
-		});
-
-		viewModel.getStateObservable().observe(this, new Observer<RequestState>()
-		{
-			@Override
-			public void onChanged(@Nullable RequestState requestState)
-			{
-				// TODO
 			}
 		});
 
@@ -228,15 +216,6 @@ public class DetailsFragment extends BaseFragment
 				}
 
 				setupUI(description);
-			}
-		});
-
-		descriptionViewModel.getStateObservable().observe(this, new Observer<RequestState>()
-		{
-			@Override
-			public void onChanged(@Nullable RequestState requestState)
-			{
-				// TODO
 			}
 		});
 
@@ -504,11 +483,5 @@ public class DetailsFragment extends BaseFragment
 
 			c++;
 		}
-	}
-
-	@Override
-	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater)
-	{
-		super.onCreateOptionsMenu(menu, inflater);
 	}
 }
