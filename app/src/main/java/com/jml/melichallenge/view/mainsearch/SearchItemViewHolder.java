@@ -41,7 +41,7 @@ public class SearchItemViewHolder extends PagedViewHolder implements View.OnClic
 
 	private RecyclerViewClickListener listener;
 
-	public SearchItemViewHolder(View itemView, RecyclerViewClickListener listener)
+	SearchItemViewHolder(View itemView, RecyclerViewClickListener listener)
 	{
 		super(itemView);
 		ButterKnife.bind(this, itemView);

@@ -2,16 +2,16 @@ package com.jml.melichallenge.repository;
 
 import com.jml.melichallenge.network.MeLiApi;
 
-public abstract class Repository
+abstract class Repository
 {
 	private MeLiApi api;
 
-	public Repository(MeLiApi meLiApi)
+	Repository(MeLiApi meLiApi)
 	{
 		this.api = meLiApi;
 	}
 
-	public MeLiApi getApi()
+	MeLiApi getApi()
 	{
 		return api;
 	}

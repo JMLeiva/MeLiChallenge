@@ -20,7 +20,7 @@ import javax.inject.Singleton;
 public class ItemRepository extends Repository
 {
 	// Simple in memoryCache
-	Map<String, Item> memoryCache;
+	private Map<String, Item> memoryCache;
 
 	@Inject
 	public ItemRepository(MeLiApi api)

@@ -3,7 +3,6 @@ package com.jml.melichallenge.di;
 import android.arch.lifecycle.ViewModel;
 import android.arch.lifecycle.ViewModelProvider;
 
-import com.jml.melichallenge.repository.persistence.SearchTerm;
 import com.jml.melichallenge.view.details.DescriptionViewModel;
 import com.jml.melichallenge.view.details.ItemViewModel;
 import com.jml.melichallenge.view.mainsearch.SearchTermViewModel;
@@ -14,7 +13,7 @@ import dagger.Module;
 import dagger.multibindings.IntoMap;
 
 @Module
-public abstract class ViewModelModule
+abstract class ViewModelModule
 {
 	@Binds
 	@IntoMap

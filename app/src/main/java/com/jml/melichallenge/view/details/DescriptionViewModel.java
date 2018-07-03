@@ -20,7 +20,7 @@ public class DescriptionViewModel extends BaseViewModel<Description>
 	private DescriptionRepository descriptionRepository;
 
 	@Inject
-	public DescriptionViewModel(Application application, DescriptionRepository descriptionRepository)
+	DescriptionViewModel(Application application, DescriptionRepository descriptionRepository)
 	{
 		super(application);
 		this.descriptionRepository = descriptionRepository;
@@ -38,24 +38,29 @@ public class DescriptionViewModel extends BaseViewModel<Description>
 			{
 				requestStateObservable.setValue(RequestState.LOADING);
 
-				return Transformations.map(descriptionRepository.getDescription(itemId), new Function<ResponseWrapper<Description>, Description>()
+				return getTransformationLiveData(itemId);
+			}
+		});
+	}
+
+	private LiveData<Description> getTransformationLiveData(String itemId)
+	{
+		return Transformations.map(descriptionRepository.getDescription(itemId), new Function<ResponseWrapper<Description>, Description>()
+		{
+			@Override
+			public Description apply(ResponseWrapper<Description> input)
+			{
+				if(input.isSuccessfull())
 				{
-					@Override
-					public Description apply(ResponseWrapper<Description> input)
-					{
-						if(input.isSuccessfull())
-						{
-							requestStateObservable.setValue(RequestState.SUCCESS);
-							return input.getData();
-						}
-						else
-						{
-							errorWrapperObservable.setValue(input.getError());
-							requestStateObservable.setValue(RequestState.FAILURE);
-							return null;
-						}
-					}
-				});
+					requestStateObservable.setValue(RequestState.SUCCESS);
+					return input.getData();
+				}
+				else
+				{
+					errorWrapperObservable.setValue(input.getError());
+					requestStateObservable.setValue(RequestState.FAILURE);
+					return null;
+				}
 			}
 		});
 	}

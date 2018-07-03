@@ -8,7 +8,7 @@ import android.support.annotation.NonNull;
 @Entity(tableName = "search_terms")
 public class SearchTerm {
 
-	public SearchTerm()
+	SearchTerm()
 	{
 
 	}

@@ -8,8 +8,8 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -29,7 +29,6 @@ import com.jml.melichallenge.model.Item;
 import com.jml.melichallenge.model.RequestState;
 import com.jml.melichallenge.model.SearchQuery;
 import com.jml.melichallenge.model.SearchResult;
-import com.jml.melichallenge.network.ConnectionManager;
 import com.jml.melichallenge.repository.ErrorWrapper;
 import com.jml.melichallenge.view.common.AdapterClickListener;
 import com.jml.melichallenge.view.common.BaseFragment;
@@ -91,7 +90,7 @@ public class MainSearchFragment extends BaseFragment implements PagedRecyclerVie
 
 
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
+	public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
 	{
 		View view = inflater.inflate(R.layout.main_search_fragment, container, false);
 		ButterKnife.bind(this, view);
@@ -175,7 +174,7 @@ public class MainSearchFragment extends BaseFragment implements PagedRecyclerVie
 				}
 				else
 				{
-					String errorMsg = errorWrapper.getMessage();
+					String errorMsg = errorWrapper != null ? errorWrapper.getMessage() : null;
 
 					if (errorMsg != null)
 					{
@@ -241,22 +240,29 @@ public class MainSearchFragment extends BaseFragment implements PagedRecyclerVie
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater)
 	{
 		inflater.inflate(R.menu.main_search_menu, menu);
-
-		SearchManager searchManager = (SearchManager) getContext().getSystemService(Context.SEARCH_SERVICE);
 		MenuItem searchMenuItem = menu.findItem(R.id.action_search);
 
-		// Setup SearchView
-		searchView = (SearchView) searchMenuItem.getActionView();
+		SearchManager searchManager = (SearchManager) getContext().getSystemService(Context.SEARCH_SERVICE);
 
-		searchView.setQueryHint(getContext().getString(R.string.main_search_hint));
-		searchView.setSearchableInfo(searchManager.getSearchableInfo(getActivity().getComponentName()));
-		searchView.setSubmitButtonEnabled(true);
-		searchView.setOnQueryTextListener(this);
-		searchView.setOnCloseListener(this);
-		searchView.setOnSuggestionListener(this);
+		if(searchManager != null)
+		{
+			// Setup SearchView
+			searchView = (SearchView) searchMenuItem.getActionView();
 
-		searchCursorAdapter = new SearchCursorAdapter(getContext());
-		searchView.setSuggestionsAdapter(searchCursorAdapter);
+			searchView.setQueryHint(getContext().getString(R.string.main_search_hint));
+			searchView.setSearchableInfo(searchManager.getSearchableInfo(getActivity().getComponentName()));
+			searchView.setSubmitButtonEnabled(true);
+			searchView.setOnQueryTextListener(this);
+			searchView.setOnCloseListener(this);
+			searchView.setOnSuggestionListener(this);
+
+			searchCursorAdapter = new SearchCursorAdapter(getContext());
+			searchView.setSuggestionsAdapter(searchCursorAdapter);
+		}
+		else
+		{
+			searchMenuItem.setVisible(false);
+		}
 
 		super.onCreateOptionsMenu(menu, inflater);
 	}

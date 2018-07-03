@@ -20,10 +20,10 @@ public class SearchViewModel extends BaseViewModel<SearchResult>
 	private MutableLiveData<SearchQuery> searchQueryInput;
 	private ItemRepository itemRepository;
 	private SearchQuery query;
-	SearchResult currentResults;
+	private SearchResult currentResults;
 
 	@Inject
-	public SearchViewModel(Application application, ItemRepository itemRepository)
+	SearchViewModel(Application application, ItemRepository itemRepository)
 	{
 		super(application);
 		this.itemRepository = itemRepository;
@@ -39,26 +39,30 @@ public class SearchViewModel extends BaseViewModel<SearchResult>
 			public LiveData<SearchResult> apply(SearchQuery query)
 			{
 				requestStateObservable.setValue(RequestState.LOADING);
+				return getTransformationLiveData(query);
+			}
+		});
+	}
 
-				return Transformations.map(itemRepository.search(query), new Function<ResponseWrapper<SearchResult>, SearchResult>()
+	private LiveData<SearchResult> getTransformationLiveData(SearchQuery query)
+	{
+		return Transformations.map(itemRepository.search(query), new Function<ResponseWrapper<SearchResult>, SearchResult>()
+		{
+			@Override
+			public SearchResult apply(ResponseWrapper<SearchResult> input)
+			{
+				if(input.isSuccessfull())
 				{
-					@Override
-					public SearchResult apply(ResponseWrapper<SearchResult> input)
-					{
-						if(input.isSuccessfull())
-						{
-							currentResults = input.getData();
-							requestStateObservable.setValue(RequestState.SUCCESS);
-							return input.getData();
-						}
-						else
-						{
-							errorWrapperObservable.setValue(input.getError());
-							requestStateObservable.setValue(RequestState.FAILURE);
-							return null;
-						}
-					}
-				});
+					currentResults = input.getData();
+					requestStateObservable.setValue(RequestState.SUCCESS);
+					return input.getData();
+				}
+				else
+				{
+					errorWrapperObservable.setValue(input.getError());
+					requestStateObservable.setValue(RequestState.FAILURE);
+					return null;
+				}
 			}
 		});
 	}

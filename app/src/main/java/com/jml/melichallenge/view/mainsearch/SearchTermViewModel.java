@@ -18,20 +18,20 @@ import javax.inject.Inject;
 
 public class SearchTermViewModel extends AndroidViewModel
 {
-	protected final LiveData<List<String>> dataObservable = createDataObservable();
+	private final LiveData<List<String>> dataObservable = createDataObservable();
 	private MutableLiveData<String> searchQueryInput;
 	private SearchTermRepository searchTermRepository;
 	private BackgroundRunner backgroundRunner;
 
 	@Inject
-	public SearchTermViewModel(Application application, SearchTermRepository searchTermRepository, BackgroundRunner backgroundRunner)
+	SearchTermViewModel(Application application, SearchTermRepository searchTermRepository, BackgroundRunner backgroundRunner)
 	{
 		super(application);
 		this.searchTermRepository = searchTermRepository;
 		this.backgroundRunner = backgroundRunner;
 	}
 
-	protected LiveData<List<String>> createDataObservable()
+	private LiveData<List<String>> createDataObservable()
 	{
 		searchQueryInput = new MutableLiveData<>();
 		return Transformations.switchMap(searchQueryInput, new Function<String, LiveData<List<String>>>()

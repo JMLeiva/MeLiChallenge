@@ -2,6 +2,7 @@ package com.jml.melichallenge.view.gallery;
 
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,13 +18,11 @@ import butterknife.ButterKnife;
 
 public class GalleryZoomPictureFragment extends GalleryPictureFragment
 {
-	public final static String PICTURE_EXTRA = "PICTURE_EXTRA";
-
 	@BindView(R.id.iv_picture)
 	BigImageView iv_picture;
 
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
+	public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
 	{
 		View v = inflater.inflate(R.layout.gallery_zoom_picture_item_layout, container, false);
 		ButterKnife.bind(this, v);

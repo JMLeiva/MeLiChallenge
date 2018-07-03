@@ -7,7 +7,7 @@ public class ResponseWrapper<T>
 	private ErrorWrapper errorWrapper;
 	private boolean successful;
 
-	public ResponseWrapper()
+	private ResponseWrapper()
 	{
 		successful = false;
 	}

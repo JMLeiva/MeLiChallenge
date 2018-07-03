@@ -2,17 +2,11 @@ package com.jml.melichallenge.repository;
 
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MediatorLiveData;
-import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.Observer;
 import android.support.annotation.Nullable;
-
-import com.jml.melichallenge.model.Description;
 import com.jml.melichallenge.repository.persistence.MeLiDatabase;
 import com.jml.melichallenge.repository.persistence.SearchTerm;
-
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;

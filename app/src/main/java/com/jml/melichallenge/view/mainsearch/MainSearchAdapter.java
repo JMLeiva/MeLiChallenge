@@ -23,7 +23,7 @@ public class MainSearchAdapter extends PagedRecyclerViewAdapter<SearchItemViewHo
 	private AdapterClickListener<Item> listener;
 
 
-	public MainSearchAdapter(Context context, AdapterClickListener<Item> listener)
+	MainSearchAdapter(Context context, AdapterClickListener<Item> listener)
 	{
 		this.context = context;
 		this.items = new ArrayList<>();

@@ -10,7 +10,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.os.Parcelable;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
@@ -117,9 +117,6 @@ public class DetailsFragment extends BaseFragment
 
 	private ItemViewModel viewModel;
 	private DescriptionViewModel descriptionViewModel;
-	private GalleryAdapter galleryAdapter;
-
-	private String itemIdExtra;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState)
@@ -158,7 +155,7 @@ public class DetailsFragment extends BaseFragment
 
 		if(getArguments() != null)
 		{
-			itemIdExtra = getArguments().getString(ITEM_ID_EXTRA);
+			String itemIdExtra = getArguments().getString(ITEM_ID_EXTRA);
 			viewModel.setItemId(itemIdExtra);
 			descriptionViewModel.setItemId(itemIdExtra);
 		}
@@ -310,23 +307,28 @@ public class DetailsFragment extends BaseFragment
 			@Override
 			public void onItemClick()
 			{
-				GalleryFragment galleryFragment = new GalleryFragment();
-				Bundle args = new Bundle();
-				args.putParcelableArrayList(GalleryFragment.PICTURES_EXTRA, new ArrayList<Parcelable>(item.getPictures()));
-				args.putInt(GalleryFragment.INDEX_EXTRA, vp_gallery.getCurrentItem());
-				galleryFragment.setArguments(args);
+				FragmentManager fragmentManager = getFragmentManager();
 
-				getFragmentManager()
-						.beginTransaction()
-						.setReorderingAllowed(true)
-						//.addSharedElement(imageView, imageView.getTransitionName())
-						.replace(R.id.fragmentContainer, galleryFragment, GalleryFragment.class.getSimpleName()) //REVISAR CAMBIO DE CONFIGURACION CON ESTO ABIERTO
-						.addToBackStack(null)
-						.commit();
+				if(fragmentManager != null)
+				{
+					GalleryFragment galleryFragment = new GalleryFragment();
+					Bundle args = new Bundle();
+					args.putParcelableArrayList(GalleryFragment.PICTURES_EXTRA, new ArrayList<Parcelable>(item.getPictures()));
+					args.putInt(GalleryFragment.INDEX_EXTRA, vp_gallery.getCurrentItem());
+					galleryFragment.setArguments(args);
+
+					getFragmentManager()
+							.beginTransaction()
+							.setReorderingAllowed(true)
+							//.addSharedElement(imageView, imageView.getTransitionName())
+							.replace(R.id.fragmentContainer, galleryFragment, GalleryFragment.class.getSimpleName()) //REVISAR CAMBIO DE CONFIGURACION CON ESTO ABIERTO
+							.addToBackStack(null)
+							.commit();
+				}
 			}
 		};
 
-		galleryAdapter = new GalleryAdapter(getChildFragmentManager(), item.getPictures(), listener);
+		GalleryAdapter galleryAdapter = new GalleryAdapter(getChildFragmentManager(), item.getPictures(), listener);
 
 		vp_gallery.setAdapter(galleryAdapter);
 	}
@@ -441,19 +443,23 @@ public class DetailsFragment extends BaseFragment
 
 				if(itemliveData != null && itemliveData.getValue() != null)
 				{
+					FragmentManager fragmentManager = getFragmentManager();
 
-					DescriptionFragment galleryFragment = new DescriptionFragment();
-					Bundle args = new Bundle();
-					args.putString(ITEM_ID_EXTRA, itemliveData.getValue().getId());
-					galleryFragment.setArguments(args);
+					if (fragmentManager != null)
+					{
+						DescriptionFragment galleryFragment = new DescriptionFragment();
+						Bundle args = new Bundle();
+						args.putString(ITEM_ID_EXTRA, itemliveData.getValue().getId());
+						galleryFragment.setArguments(args);
 
-					getFragmentManager()
-							.beginTransaction()
-							.setReorderingAllowed(true)
-							//.addSharedElement(imageView, imageView.getTransitionName())
-							.replace(R.id.fragmentContainer, galleryFragment, DescriptionFragment.class.getSimpleName())
-							.addToBackStack(null)
-							.commit();
+						getFragmentManager()
+								.beginTransaction()
+								.setReorderingAllowed(true)
+								//.addSharedElement(imageView, imageView.getTransitionName())
+								.replace(R.id.fragmentContainer, galleryFragment, DescriptionFragment.class.getSimpleName())
+								.addToBackStack(null)
+								.commit();
+					}
 				}
 			}
 		});

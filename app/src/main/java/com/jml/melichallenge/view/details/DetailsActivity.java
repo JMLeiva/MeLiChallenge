@@ -3,6 +3,7 @@ package com.jml.melichallenge.view.details;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v7.app.ActionBar;
 
 import com.jml.melichallenge.R;
 import com.jml.melichallenge.view.common.BaseActivity;
@@ -17,8 +18,14 @@ public class DetailsActivity extends BaseActivity
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
-		getSupportActionBar().setTitle(R.string.item);
-		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+		ActionBar actionBar = getSupportActionBar();
+
+		if(actionBar != null)
+		{
+			getSupportActionBar().setTitle(R.string.item);
+			getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+		}
 	}
 
 	@Override
