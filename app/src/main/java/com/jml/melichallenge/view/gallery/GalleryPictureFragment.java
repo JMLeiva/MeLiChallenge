@@ -14,12 +14,9 @@ import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
-import com.jml.melichallenge.GlideApp;
 import com.jml.melichallenge.R;
 import com.jml.melichallenge.model.Picture;
-
 import butterknife.BindView;
-import butterknife.ButterKnife;
 
 public abstract class GalleryPictureFragment extends Fragment implements RequestListener<Drawable>
 {

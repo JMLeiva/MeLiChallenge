@@ -29,8 +29,10 @@ import com.jml.melichallenge.model.Item;
 import com.jml.melichallenge.model.RequestState;
 import com.jml.melichallenge.model.SearchQuery;
 import com.jml.melichallenge.model.SearchResult;
+import com.jml.melichallenge.network.ConnectionManager;
 import com.jml.melichallenge.repository.ErrorWrapper;
 import com.jml.melichallenge.view.common.AdapterClickListener;
+import com.jml.melichallenge.view.common.BaseFragment;
 import com.jml.melichallenge.view.details.DetailsActivity;
 import com.jmleiva.pagedrecyclerview.PagedRecyclerViewAdapter;
 
@@ -42,7 +44,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import dagger.android.support.AndroidSupportInjection;
 
-public class MainSearchFragment extends Fragment implements PagedRecyclerViewAdapter.Paginator, SearchView.OnQueryTextListener, SearchView.OnCloseListener, SearchView.OnSuggestionListener, AdapterClickListener<Item>
+public class MainSearchFragment extends BaseFragment implements PagedRecyclerViewAdapter.Paginator, SearchView.OnQueryTextListener, SearchView.OnCloseListener, SearchView.OnSuggestionListener, AdapterClickListener<Item>
 {
 	@BindView(R.id.recyclerView)
 	RecyclerView recyclerView;
@@ -56,6 +58,7 @@ public class MainSearchFragment extends Fragment implements PagedRecyclerViewAda
 
 	@BindView(R.id.include_empty)
 	View include_empty;
+
 
 	SearchViewModel viewModel;
 	SearchTermViewModel searchTermViewModel;
@@ -91,9 +94,17 @@ public class MainSearchFragment extends Fragment implements PagedRecyclerViewAda
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
 	{
 		View view = inflater.inflate(R.layout.main_search_fragment, container, false);
-
 		ButterKnife.bind(this, view);
 
+		setupUI();
+
+		return view;
+	}
+
+	@Override
+	protected void setupUI()
+	{
+		super.setupUI();
 		adapter = new MainSearchAdapter(getContext(), this);
 		adapter.setPaginator(this);
 
@@ -108,8 +119,12 @@ public class MainSearchFragment extends Fragment implements PagedRecyclerViewAda
 				viewModel.resetPaging();
 			}
 		});
+	}
 
-		return view;
+	@Override
+	protected void onRetryNoConnection()
+	{
+		showResults();
 	}
 
 	private void setupObserver(SearchViewModel viewModel)
@@ -122,6 +137,11 @@ public class MainSearchFragment extends Fragment implements PagedRecyclerViewAda
 			{
 				swiperefresh.setRefreshing(false);
 				adapter.stopLoading();
+
+				if(searchResult == null)
+				{
+					return;
+				}
 
 				if (searchResult.getPaging().getTotal() == 0)
 				{
@@ -149,8 +169,19 @@ public class MainSearchFragment extends Fragment implements PagedRecyclerViewAda
 			@Override
 			public void onChanged(@Nullable ErrorWrapper errorWrapper)
 			{
-				// TODO
-				Toast.makeText(getContext(), errorWrapper.getMessage(), Toast.LENGTH_SHORT);
+				if(!connectionManager.isInternetConnected())
+				{
+					showNoConnection();
+				}
+				else
+				{
+					String errorMsg = errorWrapper.getMessage();
+
+					if (errorMsg != null)
+					{
+						Toast.makeText(getContext(), errorMsg, Toast.LENGTH_SHORT).show();
+					}
+				}
 			}
 		});
 	}
@@ -171,6 +202,7 @@ public class MainSearchFragment extends Fragment implements PagedRecyclerViewAda
 	{
 		include_empty.setVisibility(View.VISIBLE);
 		swiperefresh.setVisibility(View.GONE);
+		hideNoConnection();
 	}
 
 	private void showResults()
@@ -178,6 +210,16 @@ public class MainSearchFragment extends Fragment implements PagedRecyclerViewAda
 		include_welcome.setVisibility(View.GONE);
 		include_empty.setVisibility(View.GONE);
 		swiperefresh.setVisibility(View.VISIBLE);
+		hideNoConnection();
+	}
+
+	@Override
+	protected void showNoConnection()
+	{
+		super.showNoConnection();
+		include_empty.setVisibility(View.GONE);
+		swiperefresh.setVisibility(View.GONE);
+		include_welcome.setVisibility(View.GONE);
 	}
 
 	@Override

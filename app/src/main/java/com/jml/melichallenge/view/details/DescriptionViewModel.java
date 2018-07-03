@@ -69,4 +69,9 @@ public class DescriptionViewModel extends BaseViewModel<Description>
 
 		this.itemIdInput.setValue(itemId);
 	}
+
+	public void retry()
+	{
+		this.itemIdInput.setValue(this.itemIdInput.getValue());
+	}
 }

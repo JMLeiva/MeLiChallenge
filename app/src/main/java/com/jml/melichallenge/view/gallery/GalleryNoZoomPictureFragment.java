@@ -12,7 +12,7 @@ import com.jml.melichallenge.R;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class GalleryPictureNoZoomFragment extends GalleryPictureFragment
+public class GalleryNoZoomPictureFragment extends GalleryPictureFragment
 {
 	public final static String PICTURE_EXTRA = "PICTURE_EXTRA";
 
@@ -52,16 +52,22 @@ public class GalleryPictureNoZoomFragment extends GalleryPictureFragment
 
 	private void loadImage()
 	{
-		GlideApp.with(getContext()).load(picture.getUrl())
-				.centerInside()
-				.placeholder(R.drawable.ic_photo_96dp)
-				.error(R.drawable.ic_broken_image_96dp)
-				.listener(this)
-				.into(iv_picture);
+		if(getContext() != null)
+		{
+			GlideApp.with(getContext()).load(picture.getUrl())
+					.centerInside()
+					.placeholder(R.drawable.ic_photo_96dp)
+					.error(R.drawable.ic_broken_image_96dp)
+					.listener(this)
+					.into(iv_picture);
+		}
 	}
 
 	private void loadNoPhoto()
 	{
-		GlideApp.with(getContext()).load(R.drawable.ic_photo_96dp).centerInside().into(iv_picture);
+		if(getContext() != null)
+		{
+			GlideApp.with(getContext()).load(R.drawable.ic_photo_96dp).centerInside().into(iv_picture);
+		}
 	}
 }

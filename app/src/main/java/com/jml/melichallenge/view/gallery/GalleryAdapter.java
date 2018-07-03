@@ -79,7 +79,7 @@ public class GalleryAdapter extends FragmentStatePagerAdapter
 
 	protected GalleryPictureFragment getPictureFragment()
 	{
-		return new GalleryPictureNoZoomFragment();
+		return new GalleryNoZoomPictureFragment();
 	}
 
 	@Override

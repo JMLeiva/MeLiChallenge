@@ -5,10 +5,16 @@ public class ResponseWrapper<T>
 {
 	private T data;
 	private ErrorWrapper errorWrapper;
+	private boolean successful;
+
+	public ResponseWrapper()
+	{
+		successful = false;
+	}
 
 	public boolean isSuccessfull()
 	{
-		return errorWrapper == null;
+		return successful;
 	}
 
 	public T getData()
@@ -35,6 +41,7 @@ public class ResponseWrapper<T>
 	{
 		ResponseWrapper<T> result = new ResponseWrapper<>();
 		result.data = data;
+		result.successful = true;
 		return result;
 	}
 
@@ -42,6 +49,7 @@ public class ResponseWrapper<T>
 	{
 		ResponseWrapper<T> result = new ResponseWrapper<>();
 		result.errorWrapper = new ErrorWrapper(code, message);
+		result.successful = false;
 		return result;
 	}
 }
