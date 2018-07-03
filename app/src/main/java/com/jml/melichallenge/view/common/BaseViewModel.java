@@ -9,7 +9,7 @@ import com.jml.melichallenge.repository.ErrorWrapper;
 
 public abstract class BaseViewModel<T> extends AndroidViewModel
 {
-	protected final LiveData<T> dataObservable = createDataObservable();
+	private final LiveData<T> dataObservable = createDataObservable();
 
 	protected MutableLiveData<RequestState> requestStateObservable;
 	protected MutableLiveData<ErrorWrapper> errorWrapperObservable;

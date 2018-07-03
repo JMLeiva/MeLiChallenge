@@ -2,6 +2,7 @@ package com.jml.melichallenge.view.gallery;
 
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
@@ -24,7 +25,7 @@ public class GalleryAdapter extends FragmentStatePagerAdapter
 
 
 
-	public GalleryAdapter(FragmentManager fm, List<Picture> pictures)
+	GalleryAdapter(FragmentManager fm, List<Picture> pictures)
 	{
 		this(fm, pictures, null);
 	}
@@ -79,17 +80,7 @@ public class GalleryAdapter extends FragmentStatePagerAdapter
 
 	protected GalleryPictureFragment getPictureFragment()
 	{
-		return new GalleryPictureNoZoomFragment();
-	}
-
-	@Override
-	public Parcelable saveState()
-	{
-		Bundle bundle = (Bundle)super.saveState();
-
-
-
-		return bundle;
+		return new GalleryNoZoomPictureFragment();
 	}
 
 	@Override
@@ -102,6 +93,7 @@ public class GalleryAdapter extends FragmentStatePagerAdapter
 		}
 	}
 
+	@NonNull
 	@Override
 	public Object instantiateItem(ViewGroup container, int position)
 	{

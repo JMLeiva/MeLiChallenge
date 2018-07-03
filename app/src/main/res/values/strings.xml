@@ -17,7 +17,7 @@
     <string name="attributes">Attributes</string>
     <string name="description">Description</string>
     <string name="search_welcomeText">Welcome to MeLiChallenge, try searching something to start.</string>
-    <string name="search_emtpyStateText">Ups, there\'s no results for what you serached, try searching something else</string>
+    <string name="search_emtpyStateText">Ups, there\'s no results for what you searched, try searching something else</string>
     <string name="aboutTitle">MeLiChallenge by Juan Martin Leiva</string>
     <string name="aboutBody">This is a demo app created by Juan Martin Leiva as a test for Mercado Libre (a.k.a. MeLi)\n\nThe app allows the user to perform a search in Mercado Libre, then you can see it\'s details.\n
 	\n Inside the details, you can see all the item pictures, and perform a zoom in them.
@@ -33,4 +33,7 @@
         \n   * Dagger2 for dependency injection
         \n   * BigImageViewer to perform pan and zoom in pictures
     </string>
+    <string name="search_noConnectionTextTitle">It seems there\'s no internet!</string>
+    <string name="search_noConnectionTextBody">Check your intenet connection to keep browsing.</string>
+    <string name="retry">Retry</string>
 </resources>

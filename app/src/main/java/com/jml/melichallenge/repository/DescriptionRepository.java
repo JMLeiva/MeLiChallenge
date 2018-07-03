@@ -4,9 +4,6 @@ import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 
 import com.jml.melichallenge.model.Description;
-import com.jml.melichallenge.model.Item;
-import com.jml.melichallenge.model.SearchQuery;
-import com.jml.melichallenge.model.SearchResult;
 import com.jml.melichallenge.network.ApiCallback;
 import com.jml.melichallenge.network.MeLiApi;
 
@@ -20,7 +17,7 @@ import javax.inject.Singleton;
 public class DescriptionRepository extends Repository
 {
 	// Simple in memoryCache
-	Map<String, Description> memoryCache;
+	private Map<String, Description> memoryCache;
 
 	@Inject
 	public DescriptionRepository(MeLiApi api)

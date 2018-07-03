@@ -20,7 +20,7 @@ public class ItemViewModel extends BaseViewModel<Item>
 	private ItemRepository itemRepository;
 
 	@Inject
-	public ItemViewModel(Application application, ItemRepository itemRepository)
+	ItemViewModel(Application application, ItemRepository itemRepository)
 	{
 		super(application);
 		this.itemRepository = itemRepository;
@@ -68,5 +68,10 @@ public class ItemViewModel extends BaseViewModel<Item>
 		}
 
 		this.itemIdInput.setValue(itemId);
+	}
+
+	public void retry()
+	{
+		this.itemIdInput.setValue(this.itemIdInput.getValue());
 	}
 }

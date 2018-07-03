@@ -1,7 +1,6 @@
 package com.jml.melichallenge.view.mainsearch;
 
 import android.app.SearchManager;
-import android.arch.lifecycle.LifecycleOwner;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.MatrixCursor;
@@ -17,7 +16,7 @@ public class SearchCursorAdapter extends SimpleCursorAdapter
 {
 	private List<String> list = new ArrayList<>();
 
-	public SearchCursorAdapter(Context context)
+	SearchCursorAdapter(Context context)
 	{
 		super(context, R.layout.search_list_item, null, new String[] { SearchManager.SUGGEST_COLUMN_TEXT_1 }, new int[] { android.R.id.text1 }, 0);
 	}
@@ -31,12 +30,9 @@ public class SearchCursorAdapter extends SimpleCursorAdapter
 
 	private void refresh()
 	{
-		String[] sAutocompleteColNames = new String[] {
-				BaseColumns._ID,                         // necessary for adapter
-				SearchManager.SUGGEST_COLUMN_TEXT_1 };     // the full search term
+		String[] sAutocompleteColNames = new String[] {BaseColumns._ID, SearchManager.SUGGEST_COLUMN_TEXT_1 };
 
 		MatrixCursor cursor = new MatrixCursor(sAutocompleteColNames);
-
 
 		// parse your search terms into the MatrixCursor
 		int index = 0;

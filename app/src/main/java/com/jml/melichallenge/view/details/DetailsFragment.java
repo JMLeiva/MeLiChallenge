@@ -10,14 +10,12 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.os.Parcelable;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.GridLayout;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
@@ -29,9 +27,9 @@ import com.jml.melichallenge.R;
 import com.jml.melichallenge.model.Attribute;
 import com.jml.melichallenge.model.Description;
 import com.jml.melichallenge.model.Item;
-import com.jml.melichallenge.model.RequestState;
 import com.jml.melichallenge.model.SellerAddress;
 import com.jml.melichallenge.repository.ErrorWrapper;
+import com.jml.melichallenge.view.common.BaseFragment;
 import com.jml.melichallenge.view.description.DescriptionFragment;
 import com.jml.melichallenge.view.gallery.GalleryAdapter;
 import com.jml.melichallenge.view.gallery.GalleryFragment;
@@ -46,10 +44,13 @@ import dagger.android.support.AndroidSupportInjection;
 
 import static com.jml.melichallenge.view.details.DetailsActivity.ITEM_ID_EXTRA;
 
-public class DetailsFragment extends Fragment
+public class DetailsFragment extends BaseFragment
 {
 	@BindView(R.id.vp_gallery)
 	ViewPager vp_gallery;
+
+	@BindView(R.id.pb_gallery)
+	ProgressBar pb_gallery;
 
 	@BindView(R.id.tv_condition)
 	TextView tv_condition;
@@ -105,12 +106,14 @@ public class DetailsFragment extends Fragment
 	@BindView(R.id.include_description)
 	View include_description;
 
+	@BindView(R.id.sv_main)
+	View sv_main;
+
 	@Inject
 	ViewModelProvider.Factory viewModelFactory;
 
-	ItemViewModel viewModel;
-	DescriptionViewModel descriptionViewModel;
-	GalleryAdapter galleryAdapter;
+	private ItemViewModel viewModel;
+	private DescriptionViewModel descriptionViewModel;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState)
@@ -127,6 +130,7 @@ public class DetailsFragment extends Fragment
 		View view = inflater.inflate(R.layout.details_fragment, container, false);
 		ButterKnife.bind(this, view);
 
+		setupUI();
 
 		return view;
 	}
@@ -139,12 +143,6 @@ public class DetailsFragment extends Fragment
 		descriptionViewModel = ViewModelProviders.of(this, viewModelFactory).get(DescriptionViewModel.class);
 		setupObserver(viewModel);
 		setupObserver(descriptionViewModel);
-	}
-
-	@Override
-	public void onResume()
-	{
-		super.onResume();
 
 		if(getArguments() != null)
 		{
@@ -152,6 +150,12 @@ public class DetailsFragment extends Fragment
 			viewModel.setItemId(itemIdExtra);
 			descriptionViewModel.setItemId(itemIdExtra);
 		}
+	}
+
+	@Override
+	public void onResume()
+	{
+		super.onResume();
 	}
 
 	private void setupObserver(ItemViewModel viewModel)
@@ -162,16 +166,12 @@ public class DetailsFragment extends Fragment
 			@Override
 			public void onChanged(@Nullable Item item)
 			{
-				setupUI(item);
-			}
-		});
+				if(item == null)
+				{
+					return;
+				}
 
-		viewModel.getStateObservable().observe(this, new Observer<RequestState>()
-		{
-			@Override
-			public void onChanged(@Nullable RequestState requestState)
-			{
-				// TODO
+				setupUI(item);
 			}
 		});
 
@@ -185,11 +185,18 @@ public class DetailsFragment extends Fragment
 					return;
 				}
 
-				String errorMsg = errorWrapper.getMessage();
-
-				if(errorMsg != null)
+				if(!connectionManager.isInternetConnected())
 				{
-					Toast.makeText(getContext(), errorMsg, Toast.LENGTH_SHORT).show();
+					showNoConnection();
+				}
+				else
+				{
+					String errorMsg = errorWrapper.getMessage();
+
+					if (errorMsg != null)
+					{
+						Toast.makeText(getContext(), errorMsg, Toast.LENGTH_SHORT).show();
+					}
 				}
 			}
 		});
@@ -203,16 +210,12 @@ public class DetailsFragment extends Fragment
 			@Override
 			public void onChanged(@Nullable Description description)
 			{
-				setupUI(description);
-			}
-		});
+				if(description == null)
+				{
+					return;
+				}
 
-		descriptionViewModel.getStateObservable().observe(this, new Observer<RequestState>()
-		{
-			@Override
-			public void onChanged(@Nullable RequestState requestState)
-			{
-				// TODO
+				setupUI(description);
 			}
 		});
 
@@ -236,6 +239,29 @@ public class DetailsFragment extends Fragment
 		});
 	}
 
+	@Override
+	protected void onRetryNoConnection()
+	{
+		hideNoConnection();
+		viewModel.retry();
+		descriptionViewModel.retry();
+	}
+
+	@Override
+	protected void showNoConnection()
+	{
+		super.showNoConnection();
+		sv_main.setVisibility(View.GONE);
+	}
+
+	@Override
+	protected void hideNoConnection()
+	{
+		super.hideNoConnection();
+		sv_main.setVisibility(View.VISIBLE);
+	}
+
+
 	private void setupUI(Description description)
 	{
 		setupDescription(description);
@@ -253,28 +279,35 @@ public class DetailsFragment extends Fragment
 
 	private void setupGallery(final Item item)
 	{
+		pb_gallery.setVisibility(View.GONE);
+
 		GalleryAdapter.OnItemClickListener listener = new GalleryAdapter.OnItemClickListener()
 		{
-
 			@Override
 			public void onItemClick()
 			{
-				GalleryFragment galleryFragment = new GalleryFragment();
-				Bundle args = new Bundle();
-				args.putParcelableArrayList(GalleryFragment.PICTURES_EXTRA, new ArrayList<Parcelable>(item.getPictures()));
-				args.putInt(GalleryFragment.INDEX_EXTRA, vp_gallery.getCurrentItem());
-				galleryFragment.setArguments(args);
+				FragmentManager fragmentManager = getFragmentManager();
 
-				getFragmentManager()
-						.beginTransaction()
-						.setReorderingAllowed(true)
-						//.addSharedElement(imageView, imageView.getTransitionName())
-						.add(R.id.fragmentContainer, galleryFragment, GalleryFragment.class.getSimpleName()) //REVISAR CAMBIO DE CONFIGURACION CON ESTO ABIERTO
-						.commit();
+				if(fragmentManager != null)
+				{
+					GalleryFragment galleryFragment = new GalleryFragment();
+					Bundle args = new Bundle();
+					args.putParcelableArrayList(GalleryFragment.PICTURES_EXTRA, new ArrayList<Parcelable>(item.getPictures()));
+					args.putInt(GalleryFragment.INDEX_EXTRA, vp_gallery.getCurrentItem());
+					galleryFragment.setArguments(args);
+
+					getFragmentManager()
+							.beginTransaction()
+							.setReorderingAllowed(true)
+							//.addSharedElement(imageView, imageView.getTransitionName())
+							.replace(R.id.fragmentContainer, galleryFragment, GalleryFragment.class.getSimpleName()) //REVISAR CAMBIO DE CONFIGURACION CON ESTO ABIERTO
+							.addToBackStack(null)
+							.commit();
+				}
 			}
 		};
 
-		galleryAdapter = new GalleryAdapter(getChildFragmentManager(), item.getPictures(), listener);
+		GalleryAdapter galleryAdapter = new GalleryAdapter(getChildFragmentManager(), item.getPictures(), listener);
 
 		vp_gallery.setAdapter(galleryAdapter);
 	}
@@ -389,19 +422,23 @@ public class DetailsFragment extends Fragment
 
 				if(itemliveData != null && itemliveData.getValue() != null)
 				{
+					FragmentManager fragmentManager = getFragmentManager();
 
-					DescriptionFragment galleryFragment = new DescriptionFragment();
-					Bundle args = new Bundle();
-					args.putString(ITEM_ID_EXTRA, itemliveData.getValue().getId());
-					galleryFragment.setArguments(args);
+					if (fragmentManager != null)
+					{
+						DescriptionFragment galleryFragment = new DescriptionFragment();
+						Bundle args = new Bundle();
+						args.putString(ITEM_ID_EXTRA, itemliveData.getValue().getId());
+						galleryFragment.setArguments(args);
 
-					getFragmentManager()
-							.beginTransaction()
-							.setReorderingAllowed(true)
-							//.addSharedElement(imageView, imageView.getTransitionName())
-							.add(R.id.fragmentContainer, galleryFragment, DescriptionFragment.class.getSimpleName())
-							.addToBackStack(null)
-							.commit();
+						getFragmentManager()
+								.beginTransaction()
+								.setReorderingAllowed(true)
+								//.addSharedElement(imageView, imageView.getTransitionName())
+								.replace(R.id.fragmentContainer, galleryFragment, DescriptionFragment.class.getSimpleName())
+								.addToBackStack(null)
+								.commit();
+					}
 				}
 			}
 		});
@@ -437,11 +474,5 @@ public class DetailsFragment extends Fragment
 
 			gl_attributes.addView(view, lp);
 		}
-	}
-
-	@Override
-	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater)
-	{
-		super.onCreateOptionsMenu(menu, inflater);
 	}
 }

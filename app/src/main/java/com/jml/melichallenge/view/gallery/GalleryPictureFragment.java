@@ -4,22 +4,16 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.ProgressBar;
 
 import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
-import com.jml.melichallenge.GlideApp;
 import com.jml.melichallenge.R;
 import com.jml.melichallenge.model.Picture;
-
 import butterknife.BindView;
-import butterknife.ButterKnife;
 
 public abstract class GalleryPictureFragment extends Fragment implements RequestListener<Drawable>
 {
