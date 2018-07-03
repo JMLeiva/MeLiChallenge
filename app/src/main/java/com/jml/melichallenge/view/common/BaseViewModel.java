@@ -4,28 +4,35 @@ import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
+
 import com.jml.melichallenge.model.RequestState;
 import com.jml.melichallenge.repository.ErrorWrapper;
 
 public abstract class BaseViewModel<T> extends AndroidViewModel
 {
-	private final LiveData<T> dataObservable = createDataObservable();
+	final LiveData<T> dataObservable = createDataObservable();
 
 	protected MutableLiveData<RequestState> requestStateObservable;
 	protected MutableLiveData<ErrorWrapper> errorWrapperObservable;
 
-	public BaseViewModel(Application application)
+	private BlindObserver<T> blindObserver;
+
+	BaseViewModel(Application application)
 	{
 		super(application);
 		requestStateObservable = new MutableLiveData<>();
 		errorWrapperObservable = new MutableLiveData<>();
+
+		blindObserver = new BlindObserver<>();
+
+		dataObservable.observeForever(blindObserver);
 	}
 
 	protected abstract LiveData<T> createDataObservable();
 
-	public LiveData<T> getDataObservable()
+	public T getData()
 	{
-		return dataObservable;
+		return dataObservable.getValue();
 	}
 
 	public LiveData<RequestState> getStateObservable()
@@ -36,6 +43,13 @@ public abstract class BaseViewModel<T> extends AndroidViewModel
 	public LiveData<ErrorWrapper> getErrorObservable()
 	{
 		return errorWrapperObservable;
+	}
+
+	@Override
+	public void onCleared()
+	{
+		super.onCleared();
+		dataObservable.removeObserver(blindObserver);
 	}
 
 }

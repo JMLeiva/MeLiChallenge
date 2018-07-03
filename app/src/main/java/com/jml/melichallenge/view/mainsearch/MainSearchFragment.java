@@ -11,7 +11,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
@@ -32,6 +31,7 @@ import com.jml.melichallenge.model.IdName;
 import com.jml.melichallenge.model.Item;
 import com.jml.melichallenge.model.SearchQuery;
 import com.jml.melichallenge.model.SearchResult;
+import com.jml.melichallenge.model.states.EntityListState;
 import com.jml.melichallenge.repository.ErrorWrapper;
 import com.jml.melichallenge.view.common.AdapterClickListener;
 import com.jml.melichallenge.view.common.BaseFragment;
@@ -141,42 +141,12 @@ public class MainSearchFragment extends BaseFragment implements PagedRecyclerVie
 
 	private void setupObserver(SearchViewModel viewModel)
 	{
-		// Update the list when the data changes
-		viewModel.getDataObservable().observe(this, new Observer<SearchResult>()
-		{
-			@Override
-			public void onChanged(@Nullable SearchResult searchResult)
-			{
-				swiperefresh.setRefreshing(false);
-				adapter.stopLoading();
-
-				if(searchResult == null)
-				{
-					return;
-				}
-
-				if (searchResult.getPaging().getTotal() == 0)
-				{
-					showEmtpyState();
-					return;
-				}
-
-				showResults();
-				adapter.appendItems(searchResult.getResults());
-
-			}
-		});
-
 		viewModel.getErrorObservable().observe(this, new Observer<ErrorWrapper>()
 		{
 			@Override
 			public void onChanged(@Nullable ErrorWrapper errorWrapper)
 			{
-				if(!connectionManager.isInternetConnected())
-				{
-					showNoConnection();
-				}
-				else
+				if(connectionManager.isInternetConnected())
 				{
 					String errorMsg = errorWrapper != null ? errorWrapper.getMessage() : null;
 
@@ -184,6 +154,30 @@ public class MainSearchFragment extends BaseFragment implements PagedRecyclerVie
 					{
 						Toast.makeText(getContext(), errorMsg, Toast.LENGTH_SHORT).show();
 					}
+				}
+			}
+		});
+
+		searchViewModel.getEntityListStateObserbale().observe(this, new Observer<EntityListState>()
+		{
+			@Override
+			public void onChanged(EntityListState entityListState)
+			{
+				swiperefresh.setRefreshing(false);
+				adapter.stopLoading();
+
+				switch (entityListState)
+				{
+					case SUCCESSFULL:
+						adapter.appendItems(searchViewModel.getData().getResults());
+						showResults();
+						break;
+					case NO_CONNECTION:
+						showNoConnection();
+						break;
+					case NO_RESULTS:
+						showEmtpyState();
+						break;
 				}
 			}
 		});

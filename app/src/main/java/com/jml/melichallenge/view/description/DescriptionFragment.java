@@ -17,6 +17,7 @@ import android.widget.Toast;
 import com.jml.melichallenge.R;
 import com.jml.melichallenge.model.Description;
 import com.jml.melichallenge.model.RequestState;
+import com.jml.melichallenge.model.states.EntityState;
 import com.jml.melichallenge.repository.ErrorWrapper;
 import com.jml.melichallenge.view.details.DescriptionViewModel;
 
@@ -83,24 +84,22 @@ public class DescriptionFragment extends Fragment
 		}
 	}
 
-	private void setupObserver(DescriptionViewModel descriptionViewModel)
+	private void setupObserver(final DescriptionViewModel descriptionViewModel)
 	{
-		// Update the list when the data changesCannot find setter for field.
-		descriptionViewModel.getDataObservable().observe(this, new Observer<Description>()
+		descriptionViewModel.getEntityStateObserbale().observe(this, new Observer<EntityState>()
 		{
 			@Override
-			public void onChanged(@Nullable Description description)
+			public void onChanged(@Nullable EntityState entityState)
 			{
-				setupUI(description);
-			}
-		});
-
-		descriptionViewModel.getStateObservable().observe(this, new Observer<RequestState>()
-		{
-			@Override
-			public void onChanged(@Nullable RequestState requestState)
-			{
-				// TODO
+				switch (entityState)
+				{
+					case SUCCESSFULL:
+						setupUI(descriptionViewModel.getData());
+						break;
+					case NO_CONNECTION:
+						// TODO
+						break;
+				}
 			}
 		});
 

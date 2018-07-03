@@ -38,6 +38,12 @@ public class SearchResult
 		return Collections.unmodifiableList(dto.available_sorts);
 	}
 
+	public int resultsCount()
+	{
+		if(dto.results == null) return 0;
+		return dto.results.size();
+	}
+
 	public static class DTO
 	{
 		private List<Item> results;

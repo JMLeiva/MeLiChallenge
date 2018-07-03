@@ -1,6 +1,5 @@
 package com.jml.melichallenge.view.details;
 
-import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
@@ -28,6 +27,8 @@ import com.jml.melichallenge.model.Attribute;
 import com.jml.melichallenge.model.Description;
 import com.jml.melichallenge.model.Item;
 import com.jml.melichallenge.model.SellerAddress;
+import com.jml.melichallenge.model.states.EntityListState;
+import com.jml.melichallenge.model.states.EntityState;
 import com.jml.melichallenge.repository.ErrorWrapper;
 import com.jml.melichallenge.view.common.BaseFragment;
 import com.jml.melichallenge.view.description.DescriptionFragment;
@@ -112,7 +113,7 @@ public class DetailsFragment extends BaseFragment
 	@Inject
 	ViewModelProvider.Factory viewModelFactory;
 
-	private ItemViewModel viewModel;
+	private ItemViewModel itemViewModel;
 	private DescriptionViewModel descriptionViewModel;
 
 	@Override
@@ -139,15 +140,15 @@ public class DetailsFragment extends BaseFragment
 	public void onActivityCreated(Bundle savedInstanceState)
 	{
 		super.onActivityCreated(savedInstanceState);
-		viewModel = ViewModelProviders.of(this, viewModelFactory).get(ItemViewModel.class);
+		itemViewModel = ViewModelProviders.of(this, viewModelFactory).get(ItemViewModel.class);
 		descriptionViewModel = ViewModelProviders.of(this, viewModelFactory).get(DescriptionViewModel.class);
-		setupObserver(viewModel);
+		setupObserver(itemViewModel);
 		setupObserver(descriptionViewModel);
 
 		if(getArguments() != null)
 		{
 			String itemIdExtra = getArguments().getString(ITEM_ID_EXTRA);
-			viewModel.setItemId(itemIdExtra);
+			itemViewModel.setItemId(itemIdExtra);
 			descriptionViewModel.setItemId(itemIdExtra);
 		}
 	}
@@ -158,24 +159,27 @@ public class DetailsFragment extends BaseFragment
 		super.onResume();
 	}
 
-	private void setupObserver(ItemViewModel viewModel)
+	private void setupObserver(final ItemViewModel itemViewModel)
 	{
 		// Update the list when the data changes
-		viewModel.getDataObservable().observe(this, new Observer<Item>()
+		itemViewModel.getEntityStateObserbale().observe(this, new Observer<EntityState>()
 		{
 			@Override
-			public void onChanged(@Nullable Item item)
+			public void onChanged(EntityState entityState)
 			{
-				if(item == null)
+				switch (entityState)
 				{
-					return;
+					case SUCCESSFULL:
+						setupUI(itemViewModel.getData());
+						break;
+					case NO_CONNECTION:
+						showNoConnection();
+						break;
 				}
-
-				setupUI(item);
 			}
 		});
 
-		viewModel.getErrorObservable().observe(this, new Observer<ErrorWrapper>()
+		itemViewModel.getErrorObservable().observe(this, new Observer<ErrorWrapper>()
 		{
 			@Override
 			public void onChanged(@Nullable ErrorWrapper errorWrapper)
@@ -202,20 +206,20 @@ public class DetailsFragment extends BaseFragment
 		});
 	}
 
-	private void setupObserver(DescriptionViewModel descriptionViewModel)
+	private void setupObserver(final DescriptionViewModel descriptionViewModel)
 	{
 		// Update the list when the data changesCannot find setter for field.
-		descriptionViewModel.getDataObservable().observe(this, new Observer<Description>()
+		descriptionViewModel.getEntityStateObserbale().observe(this, new Observer<EntityState>()
 		{
 			@Override
-			public void onChanged(@Nullable Description description)
+			public void onChanged(EntityState entityListState)
 			{
-				if(description == null)
+				switch (entityListState)
 				{
-					return;
+					case SUCCESSFULL:
+						setupUI(descriptionViewModel.getData());
+						break;
 				}
-
-				setupUI(description);
 			}
 		});
 
@@ -243,7 +247,7 @@ public class DetailsFragment extends BaseFragment
 	protected void onRetryNoConnection()
 	{
 		hideNoConnection();
-		viewModel.retry();
+		itemViewModel.retry();
 		descriptionViewModel.retry();
 	}
 
@@ -418,9 +422,7 @@ public class DetailsFragment extends BaseFragment
 			@Override
 			public void onClick(View v)
 			{
-				LiveData<Item> itemliveData = viewModel.getDataObservable();
-
-				if(itemliveData != null && itemliveData.getValue() != null)
+				if(itemViewModel.getData() != null)
 				{
 					FragmentManager fragmentManager = getFragmentManager();
 
@@ -428,7 +430,7 @@ public class DetailsFragment extends BaseFragment
 					{
 						DescriptionFragment galleryFragment = new DescriptionFragment();
 						Bundle args = new Bundle();
-						args.putString(ITEM_ID_EXTRA, itemliveData.getValue().getId());
+						args.putString(ITEM_ID_EXTRA, itemViewModel.getData().getId());
 						galleryFragment.setArguments(args);
 
 						getFragmentManager()

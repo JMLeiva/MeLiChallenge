@@ -9,18 +9,23 @@ import android.arch.lifecycle.Transformations;
 import com.jml.melichallenge.model.RequestState;
 import com.jml.melichallenge.model.SearchQuery;
 import com.jml.melichallenge.model.SearchResult;
+import com.jml.melichallenge.model.states.EntityListState;
+import com.jml.melichallenge.network.ConnectionManager;
 import com.jml.melichallenge.repository.ResponseWrapper;
 import com.jml.melichallenge.repository.ItemRepository;
-import com.jml.melichallenge.view.common.BaseViewModel;
+import com.jml.melichallenge.view.common.EntityListViewModel;
 
 import javax.inject.Inject;
 
-public class SearchViewModel extends BaseViewModel<SearchResult>
+public class SearchViewModel extends EntityListViewModel<SearchResult>
 {
 	private MutableLiveData<SearchQuery> searchQueryInput;
 	private ItemRepository itemRepository;
 	private SearchQuery query;
 	private SearchResult currentResults;
+
+	@Inject
+	ConnectionManager connectionManager;
 
 	@Inject
 	SearchViewModel(Application application, ItemRepository itemRepository)
@@ -110,5 +115,30 @@ public class SearchViewModel extends BaseViewModel<SearchResult>
 		this.query.setSort(sorting);
 		query.resetPaging();
 		this.searchQueryInput.setValue(query);
+	}
+
+	@Override
+	protected EntityListState stateForResult(SearchResult input)
+	{
+		if(input != null)
+		{
+			if(input.resultsCount() > 0)
+			{
+				return EntityListState.SUCCESSFULL;
+			}
+			else
+			{
+				return EntityListState.NO_RESULTS;
+			}
+		}
+		else
+		{
+			if(!connectionManager.isInternetConnected())
+			{
+				return EntityListState.NO_CONNECTION;
+			}
+
+			return EntityListState.ERROR;
+		}
 	}
 }
