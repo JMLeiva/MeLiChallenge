@@ -8,16 +8,22 @@ import android.arch.lifecycle.Transformations;
 
 import com.jml.melichallenge.model.Description;
 import com.jml.melichallenge.model.RequestState;
+import com.jml.melichallenge.model.SearchResult;
+import com.jml.melichallenge.model.states.EntityState;
+import com.jml.melichallenge.network.ConnectionManager;
 import com.jml.melichallenge.repository.DescriptionRepository;
 import com.jml.melichallenge.repository.ResponseWrapper;
-import com.jml.melichallenge.view.common.BaseViewModel;
+import com.jml.melichallenge.view.common.EntityViewModel;
 
 import javax.inject.Inject;
 
-public class DescriptionViewModel extends BaseViewModel<Description>
+public class DescriptionViewModel extends EntityViewModel<Description>
 {
 	private MutableLiveData<String> itemIdInput;
 	private DescriptionRepository descriptionRepository;
+
+	@Inject
+	ConnectionManager connectionManager;
 
 	@Inject
 	DescriptionViewModel(Application application, DescriptionRepository descriptionRepository)
@@ -37,7 +43,6 @@ public class DescriptionViewModel extends BaseViewModel<Description>
 			public LiveData<Description> apply(String itemId)
 			{
 				requestStateObservable.setValue(RequestState.LOADING);
-
 				return getTransformationLiveData(itemId);
 			}
 		});
@@ -78,5 +83,23 @@ public class DescriptionViewModel extends BaseViewModel<Description>
 	public void retry()
 	{
 		this.itemIdInput.setValue(this.itemIdInput.getValue());
+	}
+
+	@Override
+	protected EntityState stateForResult(Description input)
+	{
+		if(input != null)
+		{
+			return EntityState.SUCCESSFULL;
+		}
+		else
+		{
+			if(!connectionManager.isInternetConnected())
+			{
+				return EntityState.NO_CONNECTION;
+			}
+
+			return EntityState.ERROR;
+		}
 	}
 }
