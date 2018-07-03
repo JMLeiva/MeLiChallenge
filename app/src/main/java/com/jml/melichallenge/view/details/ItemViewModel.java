@@ -69,4 +69,9 @@ public class ItemViewModel extends BaseViewModel<Item>
 
 		this.itemIdInput.setValue(itemId);
 	}
+
+	public void retry()
+	{
+		this.itemIdInput.setValue(this.itemIdInput.getValue());
+	}
 }

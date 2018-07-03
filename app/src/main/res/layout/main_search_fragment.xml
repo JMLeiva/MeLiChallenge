@@ -5,6 +5,14 @@
                                              android:layout_width="match_parent"
                                              android:layout_height="match_parent">
 
+    <include
+        android:id="@+id/include_no_connection"
+        layout="@layout/no_connection_layout"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:visibility="gone"/>
 
     <android.support.v4.widget.SwipeRefreshLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
@@ -23,7 +31,8 @@
     </android.support.v4.widget.SwipeRefreshLayout>
 
     <include layout="@layout/welcome_layout"
-        android:id="@+id/include_welcome"/>
+        android:id="@+id/include_welcome"
+        android:visibility="visible"/>
 
     <include layout="@layout/empty_layout"
              android:id="@+id/include_empty"

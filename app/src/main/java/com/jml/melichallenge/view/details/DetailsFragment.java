@@ -32,6 +32,7 @@ import com.jml.melichallenge.model.Item;
 import com.jml.melichallenge.model.RequestState;
 import com.jml.melichallenge.model.SellerAddress;
 import com.jml.melichallenge.repository.ErrorWrapper;
+import com.jml.melichallenge.view.common.BaseFragment;
 import com.jml.melichallenge.view.description.DescriptionFragment;
 import com.jml.melichallenge.view.gallery.GalleryAdapter;
 import com.jml.melichallenge.view.gallery.GalleryFragment;
@@ -46,10 +47,13 @@ import dagger.android.support.AndroidSupportInjection;
 
 import static com.jml.melichallenge.view.details.DetailsActivity.ITEM_ID_EXTRA;
 
-public class DetailsFragment extends Fragment
+public class DetailsFragment extends BaseFragment
 {
 	@BindView(R.id.vp_gallery)
 	ViewPager vp_gallery;
+
+	@BindView(R.id.pb_gallery)
+	ProgressBar pb_gallery;
 
 	@BindView(R.id.tv_condition)
 	TextView tv_condition;
@@ -105,12 +109,17 @@ public class DetailsFragment extends Fragment
 	@BindView(R.id.include_description)
 	View include_description;
 
+	@BindView(R.id.sv_main)
+	View sv_main;
+
 	@Inject
 	ViewModelProvider.Factory viewModelFactory;
 
-	ItemViewModel viewModel;
-	DescriptionViewModel descriptionViewModel;
-	GalleryAdapter galleryAdapter;
+	private ItemViewModel viewModel;
+	private DescriptionViewModel descriptionViewModel;
+	private GalleryAdapter galleryAdapter;
+
+	private String itemIdExtra;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState)
@@ -127,6 +136,7 @@ public class DetailsFragment extends Fragment
 		View view = inflater.inflate(R.layout.details_fragment, container, false);
 		ButterKnife.bind(this, view);
 
+		setupUI();
 
 		return view;
 	}
@@ -148,7 +158,7 @@ public class DetailsFragment extends Fragment
 
 		if(getArguments() != null)
 		{
-			String itemIdExtra = getArguments().getString(ITEM_ID_EXTRA);
+			itemIdExtra = getArguments().getString(ITEM_ID_EXTRA);
 			viewModel.setItemId(itemIdExtra);
 			descriptionViewModel.setItemId(itemIdExtra);
 		}
@@ -162,6 +172,11 @@ public class DetailsFragment extends Fragment
 			@Override
 			public void onChanged(@Nullable Item item)
 			{
+				if(item == null)
+				{
+					return;
+				}
+
 				setupUI(item);
 			}
 		});
@@ -185,11 +200,18 @@ public class DetailsFragment extends Fragment
 					return;
 				}
 
-				String errorMsg = errorWrapper.getMessage();
-
-				if(errorMsg != null)
+				if(!connectionManager.isInternetConnected())
 				{
-					Toast.makeText(getContext(), errorMsg, Toast.LENGTH_SHORT).show();
+					showNoConnection();
+				}
+				else
+				{
+					String errorMsg = errorWrapper.getMessage();
+
+					if (errorMsg != null)
+					{
+						Toast.makeText(getContext(), errorMsg, Toast.LENGTH_SHORT).show();
+					}
 				}
 			}
 		});
@@ -203,6 +225,11 @@ public class DetailsFragment extends Fragment
 			@Override
 			public void onChanged(@Nullable Description description)
 			{
+				if(description == null)
+				{
+					return;
+				}
+
 				setupUI(description);
 			}
 		});
@@ -236,6 +263,29 @@ public class DetailsFragment extends Fragment
 		});
 	}
 
+	@Override
+	protected void onRetryNoConnection()
+	{
+		hideNoConnection();
+		viewModel.retry();
+		descriptionViewModel.retry();
+	}
+
+	@Override
+	protected void showNoConnection()
+	{
+		super.showNoConnection();
+		sv_main.setVisibility(View.GONE);
+	}
+
+	@Override
+	protected void hideNoConnection()
+	{
+		super.hideNoConnection();
+		sv_main.setVisibility(View.VISIBLE);
+	}
+
+
 	private void setupUI(Description description)
 	{
 		setupDescription(description);
@@ -253,9 +303,10 @@ public class DetailsFragment extends Fragment
 
 	private void setupGallery(final Item item)
 	{
+		pb_gallery.setVisibility(View.GONE);
+
 		GalleryAdapter.OnItemClickListener listener = new GalleryAdapter.OnItemClickListener()
 		{
-
 			@Override
 			public void onItemClick()
 			{

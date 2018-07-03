@@ -4,6 +4,7 @@ import android.app.Application;
 import android.content.Context;
 
 import com.jml.melichallenge.MeLiApplication;
+import com.jml.melichallenge.network.ConnectionManager;
 import com.jml.melichallenge.network.MeLiApi;
 import com.jml.melichallenge.network.MeLiApiImpl;
 import com.jml.melichallenge.repository.DescriptionRepository;
@@ -63,5 +64,12 @@ public class MeLiAppModule
 	@Provides
 	SearchTermRepository providesSearchTermRepository(MeLiDatabase meLiDatabase) {
 		return new SearchTermRepository(meLiDatabase);
+	}
+
+	@Singleton
+	@Provides
+	ConnectionManager providesConnectionManager(Context context)
+	{
+		return new ConnectionManager(context);
 	}
 }
