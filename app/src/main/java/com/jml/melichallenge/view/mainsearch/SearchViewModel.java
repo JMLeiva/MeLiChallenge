@@ -99,4 +99,9 @@ public class SearchViewModel extends BaseViewModel<SearchResult>
 		this.searchQueryInput.setValue(query);
 		this.query.advancePage();
 	}
+
+	public LiveData<SearchQuery> getQuery()
+	{
+		return this.searchQueryInput;
+	}
 }

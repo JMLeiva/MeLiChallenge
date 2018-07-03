@@ -44,6 +44,8 @@ import dagger.android.support.AndroidSupportInjection;
 
 public class MainSearchFragment extends BaseFragment implements PagedRecyclerViewAdapter.Paginator, SearchView.OnQueryTextListener, SearchView.OnCloseListener, SearchView.OnSuggestionListener, AdapterClickListener<Item>
 {
+	final static String SAVE_STATE_QUERY_STR = "jml.melichallenge.SAVE_STATE_QUERY_STR";
+
 	@BindView(R.id.recyclerView)
 	RecyclerView recyclerView;
 
@@ -67,12 +69,23 @@ public class MainSearchFragment extends BaseFragment implements PagedRecyclerVie
 	@Inject
 	ViewModelProvider.Factory viewModelFactory;
 
+	SearchQuery savedInstanceSearchQuery;
+
 	@Override
 	public void onCreate(Bundle savedInstanceState)
 	{
 		AndroidSupportInjection.inject(this);
 		super.onCreate(savedInstanceState);
 		setHasOptionsMenu(true);
+
+		if(savedInstanceState != null)
+		{
+			Object searchQuery = savedInstanceState.getParcelable(SAVE_STATE_QUERY_STR);
+			if(searchQuery instanceof  SearchQuery)
+			{
+				savedInstanceSearchQuery = (SearchQuery)searchQuery;
+			}
+		}
 	}
 
 	@Override
@@ -332,5 +345,11 @@ public class MainSearchFragment extends BaseFragment implements PagedRecyclerVie
 		intent.putExtra(DetailsActivity.ITEM_ID_EXTRA, item.getId());
 
 		startActivity(intent);
+	}
+
+	@Override
+	public void onSaveInstanceState(@NonNull Bundle outState)
+	{
+		outState.putParcelable(SAVE_STATE_QUERY_STR, viewModel.getQuery().getValue());
 	}
 }

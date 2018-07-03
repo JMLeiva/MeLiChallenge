@@ -12,12 +12,12 @@ import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
+import android.support.v7.widget.GridLayout;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.GridLayout;
 import android.widget.ProgressBar;
 import android.widget.RatingBar;
 import android.widget.TextView;
@@ -456,21 +456,9 @@ public class DetailsFragment extends BaseFragment
 		gl_attributes.setColumnCount(column);
 		gl_attributes.setRowCount(row + 1);
 
-		int c = 0;
-		int r = 0;
-
 		for(Attribute attribute : item.getAttributes())
 		{
-			if(c == column)
-			{
-				c = 0;
-				r++;
-			}
-
 			View view = layoutInflater.inflate(R.layout.attribute_cell, gl_attributes, false);
-
-			GridLayout.Spec rowSpan = GridLayout.spec(r);
-			GridLayout.Spec colspan = GridLayout.spec(c);
 
 			TextView attName = view.findViewById(R.id.tv_attributeName);
 			TextView attValue = view.findViewById(R.id.tv_attributeValue);
@@ -478,10 +466,13 @@ public class DetailsFragment extends BaseFragment
 			attName.setText(attribute.getName());
 			attValue.setText(attribute.getValue());
 
-			GridLayout.LayoutParams gridParam = new GridLayout.LayoutParams(rowSpan, colspan);
-			gl_attributes.addView(view, gridParam);
+			//GridLayout.LayoutParams gridParam = new GridLayout.LayoutParams(rowSpan, colspan);
 
-			c++;
+			GridLayout.Spec spec = GridLayout.spec(GridLayout.UNDEFINED, 1.0f);
+			GridLayout.LayoutParams lp = new GridLayout.LayoutParams(new ViewGroup.MarginLayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT));
+			lp.columnSpec = spec;
+
+			gl_attributes.addView(view, lp);
 		}
 	}
 }
