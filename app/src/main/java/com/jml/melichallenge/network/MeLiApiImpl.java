@@ -15,6 +15,7 @@ import com.jml.melichallenge.model.SearchResult;
 import com.jml.melichallenge.model.SellerAddress;
 
 import java.io.IOException;
+import java.util.List;
 
 import okhttp3.OkHttpClient;
 import okhttp3.ResponseBody;
@@ -53,6 +54,9 @@ public class MeLiApiImpl implements MeLiApi
 
 		@GET(PATH_ITEM + "/{item_id}/" + PATH_DESCRIPTION)
 		Call<Description> getItemDescription(@Path("item_id") String itemId);
+
+		@GET(PATH_SITE)
+		Call<List<IdName>> getSites();
 	}
 
 	private Service service;
@@ -111,6 +115,12 @@ public class MeLiApiImpl implements MeLiApi
 	public void getItemDescription(String itemId, final ApiCallback<Description> callback)
 	{
 		makeCall(service.getItemDescription(itemId), callback);
+	}
+
+	@Override
+	public void getSites(ApiCallback<List<IdName>> callback)
+	{
+		makeCall(service.getSites(), callback);
 	}
 
 	private<T> void makeCall(Call<T> call, final ApiCallback<T> callback)

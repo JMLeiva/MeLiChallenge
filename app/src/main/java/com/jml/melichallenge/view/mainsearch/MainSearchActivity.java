@@ -9,6 +9,9 @@ public class MainSearchActivity extends BaseActivity
 {
 	private final String FRAGMENT_TAG = "com.jml.MainSearchFragment";
 
+	final static String CURREN_REGION_EXTRA = "jml.melichallenge.CURREN_REGION_EXTRA";
+
+
 	@Override
 	protected void createFragment()
 	{
@@ -18,8 +21,8 @@ public class MainSearchActivity extends BaseActivity
 	}
 
 	@Override
-	protected String getFragmentTag()
+	protected String[] getFragmentTags()
 	{
-		return FRAGMENT_TAG;
+		return new String[]{FRAGMENT_TAG};
 	}
 }

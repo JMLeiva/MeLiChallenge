@@ -27,9 +27,7 @@ public abstract class BaseActivity extends DaggerAppCompatActivity
 		}
 		else
 		{
-			Fragment fragment = getSupportFragmentManager().findFragmentByTag(getFragmentTag());
-
-			if(fragment == null)
+			if(mustCreateFragment())
 			{
 				createFragment();
 			}
@@ -37,7 +35,22 @@ public abstract class BaseActivity extends DaggerAppCompatActivity
 	}
 
 	protected abstract void createFragment();
-	protected abstract String getFragmentTag();
+	protected abstract String[] getFragmentTags();
+
+	private boolean mustCreateFragment()
+	{
+		for(String tag : getFragmentTags())
+		{
+			Fragment fragment = getSupportFragmentManager().findFragmentByTag(tag);
+
+			if(fragment == null)
+			{
+				return false;
+			}
+		}
+
+		return true;
+	}
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item)

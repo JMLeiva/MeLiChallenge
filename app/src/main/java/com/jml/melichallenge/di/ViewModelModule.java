@@ -7,6 +7,7 @@ import com.jml.melichallenge.view.details.DescriptionViewModel;
 import com.jml.melichallenge.view.details.ItemViewModel;
 import com.jml.melichallenge.view.mainsearch.SearchTermViewModel;
 import com.jml.melichallenge.view.mainsearch.SearchViewModel;
+import com.jml.melichallenge.view.mainsearch.SitesViewModel;
 
 import dagger.Binds;
 import dagger.Module;
@@ -34,6 +35,11 @@ abstract class ViewModelModule
 	@IntoMap
 	@ViewModelKey(DescriptionViewModel.class)
 	abstract ViewModel bindDescriptionViewModel(DescriptionViewModel itemViewModel);
+
+	@Binds
+	@IntoMap
+	@ViewModelKey(DescriptionViewModel.class)
+	abstract ViewModel bindSitesViewModel(SitesViewModel sitesViewModel);
 
 	@Binds
 	abstract ViewModelProvider.Factory bindViewModelFactory(MeLiViewModelProviderFactory factory);

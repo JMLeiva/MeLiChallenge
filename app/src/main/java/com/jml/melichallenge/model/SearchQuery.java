@@ -5,6 +5,9 @@ import android.os.Parcelable;
 
 public class SearchQuery implements Parcelable
 {
+	public static final String DEFAULT_SITE = "MLA";
+	public static final int DEFAILT_PAGE_SIZE = 10;
+
 	private String site;
 	private String qStr;
 	private int limit;
