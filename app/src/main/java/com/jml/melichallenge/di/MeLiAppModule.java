@@ -10,6 +10,7 @@ import com.jml.melichallenge.network.MeLiApiImpl;
 import com.jml.melichallenge.repository.DescriptionRepository;
 import com.jml.melichallenge.repository.ItemRepository;
 import com.jml.melichallenge.repository.SearchTermRepository;
+import com.jml.melichallenge.repository.SiteRepository;
 import com.jml.melichallenge.repository.persistence.MeLiDatabase;
 import com.jml.melichallenge.utils.BackgroundRunner;
 
@@ -52,6 +53,11 @@ public class MeLiAppModule
 		return new DescriptionRepository(meLiApi);
 	}
 
+	@Singleton
+	@Provides
+	SiteRepository providesSiteRepository(MeLiApi meLiApi) {
+		return new SiteRepository(meLiApi);
+	}
 
 	@Singleton
 	@Provides

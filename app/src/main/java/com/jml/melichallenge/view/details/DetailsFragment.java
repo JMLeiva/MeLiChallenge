@@ -304,7 +304,7 @@ public class DetailsFragment extends BaseFragment
 							.beginTransaction()
 							.setReorderingAllowed(true)
 							//.addSharedElement(imageView, imageView.getTransitionName())
-							.replace(R.id.fragmentContainer, galleryFragment, GalleryFragment.class.getSimpleName()) //REVISAR CAMBIO DE CONFIGURACION CON ESTO ABIERTO
+							.add(R.id.fragmentContainer, galleryFragment, DetailsActivity.FRAGMENT_GALLERY_TAG)
 							.addToBackStack(null)
 							.commit();
 				}
@@ -437,7 +437,7 @@ public class DetailsFragment extends BaseFragment
 								.beginTransaction()
 								.setReorderingAllowed(true)
 								//.addSharedElement(imageView, imageView.getTransitionName())
-								.replace(R.id.fragmentContainer, galleryFragment, DescriptionFragment.class.getSimpleName())
+								.add(R.id.fragmentContainer, galleryFragment, DetailsActivity.FRAGMENT_DESCRIPTION_TAG)
 								.addToBackStack(null)
 								.commit();
 					}

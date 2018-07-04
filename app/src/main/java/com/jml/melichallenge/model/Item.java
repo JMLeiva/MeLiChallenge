@@ -7,11 +7,11 @@ import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
 import com.jml.melichallenge.R;
+import com.jml.melichallenge.utils.CurrencySymbol;
 
 import java.lang.reflect.Type;
 import java.text.NumberFormat;
 import java.util.Collections;
-import java.util.Currency;
 import java.util.List;
 import java.util.Locale;
 
@@ -172,10 +172,10 @@ public class Item
 	{
 		public static String formatPrice(Context context, String currecyCode, int price)
 		{
-			Currency currency  = Currency.getInstance(currecyCode);
-			NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance(Locale.getDefault());
-			currencyFormatter.setCurrency(currency);
-			return currencyFormatter.format(price);
+			;
+			NumberFormat currencyFormatter = NumberFormat.getNumberInstance(Locale.getDefault());
+			currencyFormatter.setMaximumFractionDigits(0);
+			return CurrencySymbol.withCode(currecyCode) + currencyFormatter.format(price);
 		}
 
 		public static String formatDiscount(Context context, int discount)

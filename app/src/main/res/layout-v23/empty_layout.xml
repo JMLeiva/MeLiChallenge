@@ -35,7 +35,7 @@
         app:layout_constraintTop_toTopOf="parent"/>
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/tv_emptyTextView"
         style="@style/Text_Header5"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

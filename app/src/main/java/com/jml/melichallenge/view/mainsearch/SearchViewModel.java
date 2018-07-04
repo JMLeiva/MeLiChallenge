@@ -32,6 +32,7 @@ public class SearchViewModel extends EntityListViewModel<SearchResult>
 	{
 		super(application);
 		this.itemRepository = itemRepository;
+		query = new SearchQuery.Builder().pageSize(SearchQuery.DEFAILT_PAGE_SIZE).site(SearchQuery.DEFAULT_SITE).build();
 	}
 
 	@Override
@@ -77,10 +78,10 @@ public class SearchViewModel extends EntityListViewModel<SearchResult>
 		return currentResults;
 	}
 
-	public void setQuery(SearchQuery query)
+	public void setQueryStr(String qStr)
 	{
 		currentResults = null;
-		this.query = query;
+		this.query.setQStr(qStr);
 	}
 
 	public void resetPaging()
@@ -113,6 +114,14 @@ public class SearchViewModel extends EntityListViewModel<SearchResult>
 	public void setSorting(String sorting)
 	{
 		this.query.setSort(sorting);
+		query.resetPaging();
+		this.searchQueryInput.setValue(query);
+	}
+
+
+	public void setSite(String site)
+	{
+		this.query.setSite(site);
 		query.resetPaging();
 		this.searchQueryInput.setValue(query);
 	}

@@ -5,6 +5,9 @@ import android.os.Parcelable;
 
 public class SearchQuery implements Parcelable
 {
+	public static final String DEFAULT_SITE = "MLA";
+	public static final int DEFAILT_PAGE_SIZE = 10;
+
 	private String site;
 	private String qStr;
 	private int limit;
@@ -94,6 +97,16 @@ public class SearchQuery implements Parcelable
 	public void setSort(String sort)
 	{
 		this.sort = sort;
+	}
+
+	public void setSite(String site)
+	{
+		this.site = site;
+	}
+
+	public void setQStr(String QStr)
+	{
+		this.qStr = QStr;
 	}
 
 	public static class Builder

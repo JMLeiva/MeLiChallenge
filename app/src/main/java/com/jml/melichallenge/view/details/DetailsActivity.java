@@ -11,8 +11,10 @@ import com.jml.melichallenge.view.common.BaseActivity;
 public class DetailsActivity extends BaseActivity
 {
 	public static final String ITEM_ID_EXTRA = "com.jml.DetailsActivity.ITEM_ID_EXTRA";
-	private final String FRAGMENT_TAG = "com.jml.DetailsFragment";
 
+	public static final String FRAGMENT_DETAILS_TAG = "com.jml.FRAGMENT_DETAILS_TAG";
+	public static final String FRAGMENT_GALLERY_TAG = "com.jml.FRAGMENT_GALLERY_TAG";
+	public static final String FRAGMENT_DESCRIPTION_TAG = "com.jml.FRAGMENT_DESCRIPTION_TAG";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -29,6 +31,12 @@ public class DetailsActivity extends BaseActivity
 	}
 
 	@Override
+	protected String[] getRootFragmentTags()
+	{
+		return new String[]{FRAGMENT_DETAILS_TAG};
+	}
+
+	@Override
 	protected void createFragment()
 	{
 		String itemIdExtra = getIntent().getStringExtra(ITEM_ID_EXTRA);
@@ -38,12 +46,6 @@ public class DetailsActivity extends BaseActivity
 		Fragment fragment = new DetailsFragment();
 		fragment.setArguments(args);
 		final FragmentManager manager = getSupportFragmentManager();
-		manager.beginTransaction().replace(R.id.fragmentContainer, fragment, FRAGMENT_TAG).commit();
-	}
-
-	@Override
-	protected String getFragmentTag()
-	{
-		return FRAGMENT_TAG;
+		manager.beginTransaction().replace(R.id.fragmentContainer, fragment, FRAGMENT_DETAILS_TAG).commit();
 	}
 }
