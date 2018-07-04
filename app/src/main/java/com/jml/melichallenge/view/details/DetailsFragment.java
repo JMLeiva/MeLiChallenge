@@ -42,6 +42,7 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import dagger.android.support.AndroidSupportInjection;
+import me.relex.circleindicator.CircleIndicator;
 
 import static com.jml.melichallenge.view.details.DetailsActivity.ITEM_ID_EXTRA;
 
@@ -112,6 +113,9 @@ public class DetailsFragment extends BaseFragment
 
 	@BindView(R.id.sv_main)
 	View sv_main;
+
+	@BindView(R.id.ci_pagerIndicator)
+	CircleIndicator ci_pagerIndicator;
 
 	@Inject
 	ViewModelProvider.Factory viewModelFactory;
@@ -317,6 +321,7 @@ public class DetailsFragment extends BaseFragment
 		GalleryAdapter galleryAdapter = new GalleryAdapter(getChildFragmentManager(), item.getPictures(), listener);
 
 		vp_gallery.setAdapter(galleryAdapter);
+		ci_pagerIndicator.setViewPager(vp_gallery);
 	}
 
 	private void setupMainData(Item item)
