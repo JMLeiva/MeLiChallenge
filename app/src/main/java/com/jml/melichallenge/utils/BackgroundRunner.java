@@ -5,6 +5,10 @@ import java.util.concurrent.Executors;
 
 import javax.inject.Singleton;
 
+/*
+ * Simple singleton excecutor to run tasks in background
+ * */
+
 @Singleton
 public class BackgroundRunner
 {

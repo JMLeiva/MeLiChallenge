@@ -6,6 +6,9 @@ import com.jml.melichallenge.model.Picture;
 
 import java.util.List;
 
+/*
+ *	Fragment responsible for showing a single a gallery of zoomable pictures
+ * */
 public class GalleryZoomAdapter extends GalleryAdapter
 {
 

@@ -31,6 +31,7 @@ import retrofit2.http.Query;
 
 import static java.util.concurrent.TimeUnit.SECONDS;
 
+/* REST API Implementation*/
 public class MeLiApiImpl implements MeLiApi
 {
 	private static final String URL_ROOT = "https://api.mercadolibre.com/";

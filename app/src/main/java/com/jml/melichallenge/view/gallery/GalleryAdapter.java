@@ -12,6 +12,9 @@ import com.jml.melichallenge.model.Picture;
 
 import java.util.List;
 
+/*
+ *	Adapter for the gallery view pager
+ * */
 public class GalleryAdapter extends FragmentStatePagerAdapter
 {
 

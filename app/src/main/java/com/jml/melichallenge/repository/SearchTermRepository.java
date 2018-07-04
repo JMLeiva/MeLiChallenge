@@ -11,6 +11,9 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
+/*
+ * Repository used to retrieve suggestion from a qStr
+ * */
 @Singleton
 public class SearchTermRepository
 {

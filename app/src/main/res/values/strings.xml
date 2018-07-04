@@ -39,4 +39,5 @@
     <string name="sort">Sort</string>
     <string name="action_site">Change region</string>
     <string name="site_emtpyStateText">Ups, it seems there\'re not available regions at the moment.</string>
+    <string name="sites">Region</string>
 </resources>

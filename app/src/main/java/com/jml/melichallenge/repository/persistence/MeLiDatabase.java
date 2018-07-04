@@ -14,6 +14,10 @@ import java.util.List;
 
 import javax.inject.Singleton;
 
+/* MeLiChallenge Database setup
+* Creates the database & prepopupates it with sample data
+*
+* */
 @Singleton
 @Database(entities = {SearchTerm.class}, version = 1)
 public abstract class MeLiDatabase extends RoomDatabase

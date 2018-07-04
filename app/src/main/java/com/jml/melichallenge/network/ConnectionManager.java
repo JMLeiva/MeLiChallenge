@@ -7,6 +7,7 @@ import android.net.NetworkInfo;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
+/* Utility to check internet connection state*/
 @Singleton
 public class ConnectionManager
 {

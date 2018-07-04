@@ -15,6 +15,9 @@ import com.jml.melichallenge.view.common.EntityViewModel;
 
 import javax.inject.Inject;
 
+/*
+ *	ViewModel observable for Items
+ * */
 public class ItemViewModel extends EntityViewModel<Item>
 {
 

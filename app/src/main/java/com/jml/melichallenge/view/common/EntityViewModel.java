@@ -6,6 +6,9 @@ import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.Transformations;
 import com.jml.melichallenge.model.states.EntityState;
 
+/*
+ *	BaseViewModel normal entities
+ * */
 public abstract class EntityViewModel<T> extends BaseViewModel<T>
 {
 	protected LiveData<EntityState> entityStateMutableLiveData;

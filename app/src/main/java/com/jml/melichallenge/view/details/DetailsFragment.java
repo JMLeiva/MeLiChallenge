@@ -45,6 +45,9 @@ import dagger.android.support.AndroidSupportInjection;
 
 import static com.jml.melichallenge.view.details.DetailsActivity.ITEM_ID_EXTRA;
 
+/*
+ *	Fragment responsible the details of an Item
+ * */
 public class DetailsFragment extends BaseFragment
 {
 	@BindView(R.id.vp_gallery)

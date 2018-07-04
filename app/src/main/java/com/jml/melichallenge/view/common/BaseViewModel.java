@@ -8,6 +8,13 @@ import android.arch.lifecycle.MutableLiveData;
 import com.jml.melichallenge.model.RequestState;
 import com.jml.melichallenge.repository.ErrorWrapper;
 
+/*
+ * Base view model bases in a model-state change usability.
+ * It informs when there was a change of state.
+ * When state is "SUCCESSFUL", you can retreive it's date with "getData()"
+ *
+ * It also privides information about the request-state, and errors.
+ * */
 public abstract class BaseViewModel<T> extends AndroidViewModel
 {
 	final LiveData<T> dataObservable = createDataObservable();

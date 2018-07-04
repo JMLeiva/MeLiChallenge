@@ -1,6 +1,5 @@
 package com.jml.melichallenge.view.mainsearch;
 
-import android.app.ActionBar;
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.SearchManager;
@@ -49,6 +48,9 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import dagger.android.support.AndroidSupportInjection;
 
+/*
+ *	Fragment responsible for allowing the user to perform a search
+ * */
 public class MainSearchFragment extends BaseFragment implements PagedRecyclerViewAdapter.Paginator, SearchView.OnQueryTextListener, SearchView.OnCloseListener, SearchView.OnSuggestionListener, AdapterClickListener<Item>
 {
 	final static String SAVE_STATE_QUERY_STR = "jml.melichallenge.SAVE_STATE_QUERY_STR";
@@ -291,8 +293,10 @@ public class MainSearchFragment extends BaseFragment implements PagedRecyclerVie
 				return true;
 			case R.id.action_sort:
 				createSortDialog();
+				return true;
 			case R.id.action_site:
 				goToSiteSelection();
+				return true;
 			default:
 				return super.onOptionsItemSelected(item);
 		}

@@ -18,6 +18,9 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+/*
+ *	ViewModel used to get available sites
+ * */
 public class SitesViewModel extends EntityListViewModel<List<IdName>>
 {
 	private SiteRepository siteRepository;

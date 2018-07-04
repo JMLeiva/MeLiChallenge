@@ -13,6 +13,9 @@ import com.jml.melichallenge.R;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+/*
+ *	Fragment responsible for showing a single non-zoomable picture
+ * */
 public class GalleryNoZoomPictureFragment extends GalleryPictureFragment
 {
 	@BindView(R.id.iv_picture)
@@ -54,7 +57,7 @@ public class GalleryNoZoomPictureFragment extends GalleryPictureFragment
 		if(getContext() != null)
 		{
 			GlideApp.with(getContext()).load(picture.getUrl())
-					.centerInside()
+					.centerCrop()
 					.placeholder(R.drawable.ic_photo_96dp)
 					.error(R.drawable.ic_broken_image_96dp)
 					.listener(this)

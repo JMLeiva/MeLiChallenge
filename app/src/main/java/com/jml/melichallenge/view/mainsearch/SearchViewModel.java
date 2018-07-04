@@ -17,6 +17,10 @@ import com.jml.melichallenge.view.common.EntityListViewModel;
 
 import javax.inject.Inject;
 
+/*
+ *	ViewModel used to perform search
+ *  It allows pagination, region configuration and sorting,
+ * */
 public class SearchViewModel extends EntityListViewModel<SearchResult>
 {
 	private MutableLiveData<SearchQuery> searchQueryInput;

@@ -17,6 +17,9 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+/*
+ *	Fragment responsible for showing an item's picture
+ * */
 public class GalleryFragment extends Fragment
 {
 	public final static String PICTURES_EXTRA = "PICTURES_EXTRA";
@@ -51,7 +54,7 @@ public class GalleryFragment extends Fragment
 
 		ButterKnife.bind(this, view);
 
-		GalleryAdapter adapter = new GalleryZoomAdapter(getFragmentManager(), pictures);
+		GalleryAdapter adapter = new GalleryZoomAdapter(getChildFragmentManager(), pictures);
 		vp_gallery.setAdapter(adapter);
 
 		if(initialIndex < adapter.getCount())

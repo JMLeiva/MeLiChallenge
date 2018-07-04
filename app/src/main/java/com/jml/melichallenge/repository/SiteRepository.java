@@ -12,6 +12,9 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
+/*
+ * Repository used to retrieve available MeLi sites
+ * */
 @Singleton
 public class SiteRepository extends Repository
 {

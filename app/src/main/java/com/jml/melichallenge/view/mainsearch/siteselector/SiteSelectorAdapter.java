@@ -17,6 +17,9 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+/*
+ *	Adapter that lists available regions, and allows the user to select one.
+ * */
 public class SiteSelectorAdapter extends RecyclerView.Adapter<SiteSelectorViewHolder> implements RecyclerViewClickListener
 {
 	private List<IdName> data;

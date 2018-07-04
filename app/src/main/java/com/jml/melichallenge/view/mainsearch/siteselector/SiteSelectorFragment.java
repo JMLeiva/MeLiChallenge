@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.app.ActionBar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -31,6 +32,9 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import dagger.android.support.AndroidSupportInjection;
 
+/*
+ *	Fragment responsible for showing a list to select the search region
+ * */
 public class SiteSelectorFragment extends BaseFragment implements AdapterClickListener<IdName>
 {
 	SitesViewModel sitesViewModel;
@@ -57,7 +61,6 @@ public class SiteSelectorFragment extends BaseFragment implements AdapterClickLi
 	{
 		AndroidSupportInjection.inject(this);
 		super.onCreate(savedInstanceState);
-
 	}
 
 	@Override

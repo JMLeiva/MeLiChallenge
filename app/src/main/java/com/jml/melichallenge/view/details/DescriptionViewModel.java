@@ -8,7 +8,6 @@ import android.arch.lifecycle.Transformations;
 
 import com.jml.melichallenge.model.Description;
 import com.jml.melichallenge.model.RequestState;
-import com.jml.melichallenge.model.SearchResult;
 import com.jml.melichallenge.model.states.EntityState;
 import com.jml.melichallenge.network.ConnectionManager;
 import com.jml.melichallenge.repository.DescriptionRepository;
@@ -17,6 +16,9 @@ import com.jml.melichallenge.view.common.EntityViewModel;
 
 import javax.inject.Inject;
 
+/*
+ *	ViewModel observable for Item's description
+ * */
 public class DescriptionViewModel extends EntityViewModel<Description>
 {
 	private MutableLiveData<String> itemIdInput;

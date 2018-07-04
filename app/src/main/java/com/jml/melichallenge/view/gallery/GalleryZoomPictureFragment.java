@@ -16,6 +16,9 @@ import java.io.File;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+/*
+ *	Fragment responsible for showing a single zoomable - paneable picture
+ * */
 public class GalleryZoomPictureFragment extends GalleryPictureFragment
 {
 	@BindView(R.id.iv_picture)
@@ -27,6 +30,7 @@ public class GalleryZoomPictureFragment extends GalleryPictureFragment
 		View v = inflater.inflate(R.layout.gallery_zoom_picture_item_layout, container, false);
 		ButterKnife.bind(this, v);
 
+		iv_picture.getSSIV().setMaxScale(10);
 
 		if(this.picture == null)
 		{

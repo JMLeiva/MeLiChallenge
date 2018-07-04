@@ -7,6 +7,10 @@ import android.arch.lifecycle.Transformations;
 
 import com.jml.melichallenge.model.states.EntityListState;
 
+/*
+ *	BaseViewModel for list entities. It has an adition state called "No Content"
+ *  that insforms the requested list is empty
+ * */
 public abstract class EntityListViewModel<T> extends BaseViewModel<T>
 {
 	protected LiveData<EntityListState> entityListStateMutableLiveData;

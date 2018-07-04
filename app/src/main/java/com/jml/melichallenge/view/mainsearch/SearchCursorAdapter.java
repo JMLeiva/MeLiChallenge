@@ -12,6 +12,9 @@ import com.jml.melichallenge.R;
 import java.util.ArrayList;
 import java.util.List;
 
+/*
+ *	Adapter used to list search suggestions based on what the user is typing
+ * */
 public class SearchCursorAdapter extends SimpleCursorAdapter
 {
 	private List<String> list = new ArrayList<>();

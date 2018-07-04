@@ -10,6 +10,8 @@ import javax.inject.Inject;
 import javax.inject.Provider;
 import javax.inject.Singleton;
 
+/*ViewModel factory that allows DI inside ViewModels */
+
 @Singleton
 public class MeLiViewModelProviderFactory implements ViewModelProvider.Factory {
 	private final Map<Class<? extends ViewModel>, Provider<ViewModel>> creators;

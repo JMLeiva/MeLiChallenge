@@ -16,6 +16,9 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+/*
+ *	ViewModel used to obtain search suggestions
+ * */
 public class SearchTermViewModel extends AndroidViewModel
 {
 	private final LiveData<List<String>> dataObservable = createDataObservable();

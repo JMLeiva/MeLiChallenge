@@ -29,6 +29,9 @@ import dagger.android.support.AndroidSupportInjection;
 
 import static com.jml.melichallenge.view.details.DetailsActivity.ITEM_ID_EXTRA;
 
+/*
+ *	Fragment responsible for showing the full information text of an Item
+ * */
 public class DescriptionFragment extends Fragment
 {
 	@BindView(R.id.include_description)

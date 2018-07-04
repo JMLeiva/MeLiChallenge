@@ -1,6 +1,8 @@
 package com.jml.melichallenge.repository;
 
-
+/*
+ * Wraps the response (either successful or not) in a single object
+ * */
 public class ResponseWrapper<T>
 {
 	private T data;

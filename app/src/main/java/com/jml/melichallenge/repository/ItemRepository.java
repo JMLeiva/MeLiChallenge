@@ -16,6 +16,9 @@ import java.util.Map;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
+/*
+ * Repository used to retreive Items
+ * */
 @Singleton
 public class ItemRepository extends Repository
 {

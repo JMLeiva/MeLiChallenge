@@ -15,6 +15,9 @@ import com.jml.melichallenge.R;
 import com.jml.melichallenge.model.Picture;
 import butterknife.BindView;
 
+/*
+ *	Fragment responsible for showing an item's gallery
+ * */
 public abstract class GalleryPictureFragment extends Fragment implements RequestListener<Drawable>
 {
 	public final static String PICTURE_EXTRA = "PICTURE_EXTRA";

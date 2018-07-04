@@ -1,5 +1,6 @@
 package com.jml.melichallenge.repository;
 
+
 public class ErrorWrapper
 {
 	private int code;

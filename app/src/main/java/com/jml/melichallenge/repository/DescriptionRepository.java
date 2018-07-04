@@ -13,6 +13,9 @@ import java.util.Map;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
+/*
+ * Repository used to retreive Items descriptions
+ * */
 @Singleton
 public class DescriptionRepository extends Repository
 {

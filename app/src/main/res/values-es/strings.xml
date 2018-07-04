@@ -29,4 +29,11 @@
         \n   * Dagger2 para inyección de dependencia
         \n   * BigImageViewer para permitir el zoom y "panneo" de imágenes
     </string>
+    <string name="search_noConnectionTextTitle">¡Parece que no hay internet!</string>
+    <string name="search_noConnectionTextBody">Revisá tu conexión a internet para seguir buscando.</string>
+    <string name="retry">Reintentar</string>
+    <string name="sort">Ordenar</string>
+    <string name="action_site">Cambiar región</string>
+    <string name="site_emtpyStateText">Ups, parece que no hay regiones disponibles en este momento.</string>
+    <string name="sites">Regiones</string>
 </resources>

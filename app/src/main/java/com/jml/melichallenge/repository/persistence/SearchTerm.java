@@ -5,6 +5,9 @@ import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
 import android.support.annotation.NonNull;
 
+/*
+ * Table to store search terms for suggestions
+ * */
 @Entity(tableName = "search_terms")
 public class SearchTerm {
 

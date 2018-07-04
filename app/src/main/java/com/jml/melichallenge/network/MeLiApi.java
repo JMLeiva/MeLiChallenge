@@ -8,7 +8,7 @@ import com.jml.melichallenge.model.SearchResult;
 
 import java.util.List;
 
-
+/* REST API Interface*/
 public interface MeLiApi
 {
 	void search(String siteId, String qStr, int offset, int limit, String sort, ApiCallback<SearchResult> callback);

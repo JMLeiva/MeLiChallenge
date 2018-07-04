@@ -15,6 +15,9 @@ import com.jmleiva.pagedrecyclerview.PagedViewHolder;
 import java.util.ArrayList;
 import java.util.List;
 
+/*
+ *	Adapter that lists the search results
+ * */
 public class MainSearchAdapter extends PagedRecyclerViewAdapter<SearchItemViewHolder, PagedViewHolder> implements RecyclerViewClickListener
 {
 	private List<Item> items;

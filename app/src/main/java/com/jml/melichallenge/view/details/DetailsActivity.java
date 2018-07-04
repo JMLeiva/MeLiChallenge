@@ -8,6 +8,9 @@ import android.support.v7.app.ActionBar;
 import com.jml.melichallenge.R;
 import com.jml.melichallenge.view.common.BaseActivity;
 
+/*
+ *	Activity responsible the details of an Item
+ * */
 public class DetailsActivity extends BaseActivity
 {
 	public static final String ITEM_ID_EXTRA = "com.jml.DetailsActivity.ITEM_ID_EXTRA";
