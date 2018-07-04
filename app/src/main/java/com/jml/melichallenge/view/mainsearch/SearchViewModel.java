@@ -127,7 +127,11 @@ public class SearchViewModel extends EntityListViewModel<SearchResult>
 	{
 		this.query.setSite(site);
 		query.resetPaging();
-		this.searchQueryInput.setValue(query);
+
+		if(query.getQStr() != null && !query.getQStr().isEmpty())
+		{
+			this.searchQueryInput.setValue(query);
+		}
 	}
 
 	@Override

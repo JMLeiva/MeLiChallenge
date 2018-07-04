@@ -205,6 +205,7 @@ public class MainSearchFragment extends BaseFragment implements PagedRecyclerVie
 	{
 		include_empty.setVisibility(View.VISIBLE);
 		swiperefresh.setVisibility(View.GONE);
+		include_welcome.setVisibility(View.GONE);
 		getActivity().invalidateOptionsMenu();
 		hideNoConnection();
 	}
