@@ -99,6 +99,16 @@ public class SearchQuery implements Parcelable
 		this.sort = sort;
 	}
 
+	public void setSite(String site)
+	{
+		this.site = site;
+	}
+
+	public void setQStr(String QStr)
+	{
+		this.qStr = QStr;
+	}
+
 	public static class Builder
 	{
 		SearchQuery builderSearchQuuery;

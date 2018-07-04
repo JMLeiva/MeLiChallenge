@@ -1,5 +1,7 @@
 package com.jml.melichallenge.view.mainsearch;
 
+import android.app.ActionBar;
+import android.app.Activity;
 import android.app.Dialog;
 import android.app.SearchManager;
 import android.arch.lifecycle.Observer;
@@ -36,6 +38,7 @@ import com.jml.melichallenge.repository.ErrorWrapper;
 import com.jml.melichallenge.view.common.AdapterClickListener;
 import com.jml.melichallenge.view.common.BaseFragment;
 import com.jml.melichallenge.view.details.DetailsActivity;
+import com.jml.melichallenge.view.mainsearch.siteselector.SiteSelectorActivity;
 import com.jmleiva.pagedrecyclerview.PagedRecyclerViewAdapter;
 
 import java.util.List;
@@ -49,6 +52,7 @@ import dagger.android.support.AndroidSupportInjection;
 public class MainSearchFragment extends BaseFragment implements PagedRecyclerViewAdapter.Paginator, SearchView.OnQueryTextListener, SearchView.OnCloseListener, SearchView.OnSuggestionListener, AdapterClickListener<Item>
 {
 	final static String SAVE_STATE_QUERY_STR = "jml.melichallenge.SAVE_STATE_QUERY_STR";
+	private static final int SELECT_SITE_REQUEST_CODE = 1;
 
 	@BindView(R.id.recyclerView)
 	RecyclerView recyclerView;
@@ -287,6 +291,8 @@ public class MainSearchFragment extends BaseFragment implements PagedRecyclerVie
 				return true;
 			case R.id.action_sort:
 				createSortDialog();
+			case R.id.action_site:
+				goToSiteSelection();
 			default:
 				return super.onOptionsItemSelected(item);
 		}
@@ -301,7 +307,7 @@ public class MainSearchFragment extends BaseFragment implements PagedRecyclerVie
 		}
 
 		adapter.clear();
-		searchViewModel.setQuery(new SearchQuery.Builder().site("MLA").qStr(query).pageSize(10).build());
+		searchViewModel.setQueryStr(query);
 		searchTermViewModel.addNewTerm(query);
 		showResults();
 		return false;
@@ -373,7 +379,12 @@ public class MainSearchFragment extends BaseFragment implements PagedRecyclerVie
 		builder.setCancelable(true);
 		builder.setTitle(R.string.sort);
 		builder.create().show();
+	}
 
+	private void goToSiteSelection()
+	{
+		Intent intent = new Intent(getContext(), SiteSelectorActivity.class);
+		startActivityForResult(intent, SELECT_SITE_REQUEST_CODE);
 	}
 
 	@Override
@@ -389,5 +400,27 @@ public class MainSearchFragment extends BaseFragment implements PagedRecyclerVie
 	public void onSaveInstanceState(@NonNull Bundle outState)
 	{
 		outState.putParcelable(SAVE_STATE_QUERY_STR, searchViewModel.getQuery().getValue());
+	}
+
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data)
+	{
+		if(requestCode == SELECT_SITE_REQUEST_CODE)
+		{
+			if(resultCode == Activity.RESULT_OK)
+			{
+				String siteId = data.getStringExtra(SiteSelectorActivity.SELECTED_ID_NAME_EXTRA);
+
+				if(siteId != null)
+				{
+					searchViewModel.setSite(siteId);
+					adapter.clear();
+				}
+			}
+
+			return;
+		}
+
+		super.onActivityResult(requestCode, resultCode, data);
 	}
 }

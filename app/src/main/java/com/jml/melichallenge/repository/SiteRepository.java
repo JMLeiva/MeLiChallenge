@@ -30,7 +30,7 @@ public class SiteRepository extends Repository
 	{
 		final MutableLiveData<ResponseWrapper<? extends List<IdName>>> data = new MutableLiveData<>();
 
-		if(memoryCache != null)
+		if(!memoryCache.isEmpty())
 		{
 			// ONLY CACHE IF AVAILABLE POLICY
 			data.setValue(ResponseWrapper.successfullResponse(new ArrayList<>(memoryCache)));

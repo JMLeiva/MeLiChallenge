@@ -38,7 +38,7 @@ abstract class ViewModelModule
 
 	@Binds
 	@IntoMap
-	@ViewModelKey(DescriptionViewModel.class)
+	@ViewModelKey(SitesViewModel.class)
 	abstract ViewModel bindSitesViewModel(SitesViewModel sitesViewModel);
 
 	@Binds

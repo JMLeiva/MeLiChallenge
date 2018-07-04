@@ -31,7 +31,7 @@ public class DetailsActivity extends BaseActivity
 	}
 
 	@Override
-	protected String[] getFragmentTags()
+	protected String[] getRootFragmentTags()
 	{
 		return new String[]{FRAGMENT_DETAILS_TAG};
 	}

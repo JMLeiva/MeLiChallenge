@@ -35,11 +35,11 @@ public abstract class BaseActivity extends DaggerAppCompatActivity
 	}
 
 	protected abstract void createFragment();
-	protected abstract String[] getFragmentTags();
+	protected abstract String[] getRootFragmentTags();
 
 	private boolean mustCreateFragment()
 	{
-		for(String tag : getFragmentTags())
+		for(String tag : getRootFragmentTags())
 		{
 			Fragment fragment = getSupportFragmentManager().findFragmentByTag(tag);
 
