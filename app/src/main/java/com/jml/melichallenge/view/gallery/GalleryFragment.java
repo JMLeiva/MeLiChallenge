@@ -16,6 +16,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import me.relex.circleindicator.CircleIndicator;
 
 /*
  *	Fragment responsible for showing an item's picture
@@ -27,6 +28,9 @@ public class GalleryFragment extends Fragment
 
 	@BindView(R.id.vp_gallery)
 	ViewPager vp_gallery;
+
+	@BindView(R.id.ci_pagerIndicator)
+	CircleIndicator ci_pagerIndicator;
 
 	private List<Picture> pictures;
 	private int initialIndex = 0;
@@ -56,11 +60,14 @@ public class GalleryFragment extends Fragment
 
 		GalleryAdapter adapter = new GalleryZoomAdapter(getChildFragmentManager(), pictures);
 		vp_gallery.setAdapter(adapter);
+		ci_pagerIndicator.setViewPager(vp_gallery);
 
 		if(initialIndex < adapter.getCount())
 		{
 			vp_gallery.setCurrentItem(initialIndex);
 		}
+
+
 
 		return view;
 	}
