@@ -11,10 +11,10 @@ import dagger.android.AndroidInjector;
 
 @Singleton
 @Component(modules = {
-						AndroidInjectionModule.class,
-						MeLiAppModule.class,
-						ViewModelModule.class,
-						BuildersModule.class})
+		AndroidInjectionModule.class,
+		MeLiAppModule.class,
+		ViewModelModule.class,
+		BuildersModule.class})
 public interface MeLiAppComponent extends AndroidInjector<MeLiApplication>
 {
 	@Component.Builder
